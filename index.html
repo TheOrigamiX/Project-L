@@ -75,7 +75,7 @@ body.lock #intro{visibility:hidden}
   </button>
   <p>กดหัวใจค้างไว้</p>
 </div>
-<div id="auth"><div class="panel"><h3>เฉพาะโบ๊ทกับโอปอ</h3><input id="ae" class="in" type="email" placeholder="อีเมล" autocomplete="email"><input id="ap" class="in" type="password" placeholder="รหัสผ่าน" autocomplete="current-password"><button class="btn" id="lg" type="button">เข้าสู่ระบบ</button><br><button class="btn ghost" id="su" type="button">ครั้งแรก? สร้างบัญชี</button><p id="am" style="margin-top:10px;font-size:14px"></p></div></div>
+<div id="auth"><div class="panel"><h3>เฉพาะโบ๊ทกับโอปอ</h3><input id="ae" class="in" type="text" placeholder="ชื่อผู้ใช้ (boat หรือ opal)" autocomplete="username" autocapitalize="none" spellcheck="false"><input id="ap" class="in" type="password" placeholder="รหัสผ่าน" autocomplete="current-password"><button class="btn" id="lg" type="button">เข้าสู่ระบบ</button><p id="am" style="margin-top:10px;font-size:14px"></p></div></div>
 <div id="hint">ลากเพื่อหมุน · บีบหรือเลื่อนล้อเพื่อซูม · แตะสติกเกอร์เพื่อเปิด</div>
 <div id="zb"><button id="zi" type="button" aria-label="ซูมเข้า">＋</button><button id="zo" type="button" aria-label="ซูมออก">－</button></div>
 <div id="flash"></div>
@@ -217,12 +217,13 @@ async function pushMem(r,live){let img='';if(r.image_path){const g=await sb.stor
  const d=live?(performance.now()-t0-1500)/1000:(CFG.length+MEM.length)*.2;
  add(mk(m.title.slice(0,14),HEART.emoji,HEART.gif,()=>open('mem',m)),spot(Math.random()*8,8+MEM.length),d,0)}
 async function loadMem(){const r=await sb.from('memories').select('id,title,body,image_path').order('created_at');if(r.error||!r.data)return;await Promise.all(r.data.map(x=>pushMem(x)))}
+const em=u=>u.trim().toLowerCase().replace(/[^a-z0-9._-]/g,'')+'@example.com';
 function am(t){$('am').textContent=t||''}
 async function afterLogin(){$('auth').style.display='none';document.body.classList.remove('lock');await loadMem()}
 if(SB.url&&window.supabase){document.body.classList.add('lock');sb=supabase.createClient(SB.url,SB.key);
  sb.auth.getSession().then(({data})=>{if(data.session)afterLogin();else $('auth').style.display='grid'});
- $('lg').onclick=async()=>{am('กำลังเข้าสู่ระบบ...');const r=await sb.auth.signInWithPassword({email:$('ae').value.trim(),password:$('ap').value});if(r.error)am('เข้าไม่ได้: '+r.error.message);else afterLogin()};
- $('su').onclick=async()=>{am('กำลังสร้างบัญชี...');const r=await sb.auth.signUp({email:$('ae').value.trim(),password:$('ap').value});if(r.error)am('สร้างไม่ได้: '+r.error.message);else if(r.data.session)afterLogin();else am('ส่งอีเมลยืนยันแล้ว กดลิงก์ในอีเมล แล้วกลับมากดเข้าสู่ระบบ')}}
+ $('lg').onclick=async()=>{am('กำลังเข้าสู่ระบบ...');const r=await sb.auth.signInWithPassword({email:em($('ae').value),password:$('ap').value});if(r.error)am('เข้าไม่ได้: '+r.error.message);else afterLogin()};
+}
 </script>
 </body>
 </html>
