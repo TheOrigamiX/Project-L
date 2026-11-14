@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>โบ๊ท & โอปอ — ครบรอบ 2 เดือน</title>
+<link href="https://fonts.googleapis.com/css2?family=Chonburi&family=Mali:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#ff9db8;--gold:#ffd98a;--moon:#eef1ff;--mute:#d3d8ff;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:inherit;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+body{background:radial-gradient(ellipse at 20% 10%,#2c1b66,transparent 55%),radial-gradient(ellipse at 90% 80%,#3a1747,transparent 55%),#070b1f;color:var(--moon);font:400 16px/1.7 Mali,'Noto Sans Thai',sans-serif;touch-action:none;user-select:none;-webkit-user-select:none}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block}
+.ttl{font:400 clamp(30px,8vw,60px)/1.3 Chonburi,serif;text-shadow:0 0 30px #b47bff99,0 2px 12px #070b1f}
+#intro{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;z-index:3;transition:opacity 1s}
+#intro.off{opacity:0;pointer-events:none}
+#intro p{color:var(--mute);text-shadow:0 0 3px #070b1f,0 1px 12px #070b1f}
+#hb{background:none;border:0;width:min(46vw,190px);margin:16px 0;cursor:pointer;touch-action:none;-webkit-touch-callout:none;animation:beat 1.6s ease-in-out infinite;filter:drop-shadow(0 0 18px #ff7fa6aa)}
+#hb svg{width:100%;display:block}
+@keyframes beat{50%{transform:scale(1.08)}}
+#flash{position:fixed;inset:0;background:radial-gradient(circle,#fff,#ff9db8 40%,transparent 75%);opacity:0;pointer-events:none;z-index:2000}
+#flash.on{animation:fl 2.4s ease-out}
+@keyframes fl{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+.stk,.chip{position:fixed;left:0;top:0;z-index:2;will-change:transform;opacity:0;pointer-events:none}
+.stk{width:64px;height:64px;margin:-32px 0 0 -32px;border:1px solid #ffffff66;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffff55,#ffffff14);backdrop-filter:blur(4px);color:var(--moon);cursor:pointer;display:grid;place-items:center;font-size:30px;box-shadow:0 0 22px #b47bff88}
+body.gal .stk{pointer-events:auto}
+.stk small{position:absolute;top:68px;left:50%;transform:translateX(-50%);font:600 13px Mali,sans-serif;white-space:nowrap;text-shadow:0 0 4px #070b1f,0 1px 10px #070b1f}
+.chip{font:400 18px Chonburi,serif;color:var(--gold);white-space:nowrap;text-shadow:0 0 10px #ffd98a99,0 0 3px #070b1f}
+#hint{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:var(--mute);font-size:14px;opacity:0;transition:opacity 1.5s;z-index:2;pointer-events:none;text-shadow:0 0 4px #070b1f,0 1px 10px #070b1f}
+#ov{position:fixed;inset:0;z-index:1000;display:none;place-items:center;padding:18px;background:#070b1f66;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+#ov.on{display:grid;animation:in .35s ease}
+@keyframes in{from{opacity:0}}
+.panel{position:relative;width:min(100%,440px);max-height:86vh;overflow:auto;touch-action:pan-y;background:#0a0f2cb8;border:1px solid #ffffff33;border-radius:26px;padding:30px 24px 26px;text-align:center;box-shadow:0 0 60px #b47bff55;user-select:text;-webkit-user-select:text}
+.panel h3{font:400 24px Chonburi,serif;color:var(--gold);margin-bottom:14px}
+#x{position:absolute;top:8px;right:10px;background:none;border:0;color:var(--moon);font-size:24px;cursor:pointer;min-width:44px;min-height:44px}
+.big{font:400 clamp(24px,8vw,38px) Chonburi,serif;color:var(--rose)}
+.btn{font:600 17px Mali,sans-serif;color:#2a1040;background:linear-gradient(135deg,var(--gold),var(--rose));border:0;border-radius:999px;padding:12px 30px;min-height:46px;cursor:pointer;margin-top:12px}
+#ty{white-space:pre-wrap;text-align:left;line-height:2;min-height:12em}
+.clk{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.clk div{background:#ffffff12;border-radius:14px;padding:10px 2px}
+.clk span{display:block;font-size:12px;color:var(--mute)}
+#gm{position:relative;height:300px;overflow:hidden;border-radius:16px;background:#ffffff0d;margin-top:10px;touch-action:none}
+#gm b{position:absolute;top:-44px;font-size:34px;font-weight:400;cursor:pointer;padding:8px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(380px)}}
+.ph{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ph div{aspect-ratio:1;border:1.5px dashed #ffffff55;border-radius:16px;display:grid;place-items:center;color:var(--mute);font-size:13px}
+.eq{display:flex;gap:5px;justify-content:center;height:40px;align-items:flex-end;margin:10px 0 14px}
+.eq i{width:6px;background:var(--rose);border-radius:3px;animation:eq .9s ease-in-out infinite alternate}
+@keyframes eq{from{height:6px}to{height:38px}}
+.eq.off i{animation:none;height:6px}
+.stk.g{width:88px;height:88px;margin:-44px 0 0 -44px;background:none;border:0;box-shadow:none;backdrop-filter:none}
+.stk.g img{width:100%;height:100%;object-fit:contain;pointer-events:none;filter:drop-shadow(0 0 10px #b47bffaa)}
+.stk.g small{top:92px}
+.mi{max-width:100%;max-height:50vh;border-radius:16px;object-fit:contain}
+.ph1{aspect-ratio:4/3;border:1.5px dashed #ffffff55;border-radius:16px;display:grid;place-items:center;color:var(--mute)}
+#zb{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:900;display:none;flex-direction:column;gap:8px}
+body.gal #zb{display:flex}
+#zb button{width:44px;height:44px;border-radius:50%;border:1px solid #ffffff55;background:#ffffff1c;color:var(--moon);font-size:22px;cursor:pointer;backdrop-filter:blur(4px)}
+.in{display:block;width:100%;background:#ffffff14;border:1px solid #ffffff44;border-radius:12px;color:var(--moon);font:400 16px Mali,sans-serif;padding:10px 12px;margin-bottom:10px;user-select:text;-webkit-user-select:text}
+#auth{position:fixed;inset:0;z-index:1500;display:none;place-items:center;padding:18px;background:#070b1fcc;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+body.lock #intro{visibility:hidden}
+.btn.ghost{background:none;color:var(--mute);border:1px solid #ffffff44}
+@media(prefers-reduced-motion:reduce){#hb{animation:none}.eq i{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="intro">
+  <h1 class="ttl">ครบรอบ 2 เดือน</h1>
+  <p>โบ๊ท &amp; โอปอ · 15 กันยายน 2569</p>
+  <button id="hb" type="button" aria-label="กดหัวใจค้างไว้">
+    <svg viewBox="0 0 100 92"><defs><clipPath id="cp"><rect id="fill" x="0" y="90" width="100" height="92"/></clipPath></defs>
+    <path d="M50 88C20 62 2 44 2 26 2 12 12 3 25 3c11 0 20 6 25 15C55 9 64 3 75 3c13 0 23 9 23 23 0 18-18 36-48 62z" fill="#ff7fa6" clip-path="url(#cp)"/>
+    <path d="M50 88C20 62 2 44 2 26 2 12 12 3 25 3c11 0 20 6 25 15C55 9 64 3 75 3c13 0 23 9 23 23 0 18-18 36-48 62z" fill="none" stroke="#ff9db8" stroke-width="3"/></svg>
+  </button>
+  <p>กดหัวใจค้างไว้</p>
+</div>
+<div id="auth"><div class="panel"><h3>เฉพาะโบ๊ทกับโอปอ</h3><input id="ae" class="in" type="email" placeholder="อีเมล" autocomplete="email"><input id="ap" class="in" type="password" placeholder="รหัสผ่าน" autocomplete="current-password"><button class="btn" id="lg" type="button">เข้าสู่ระบบ</button><br><button class="btn ghost" id="su" type="button">ครั้งแรก? สร้างบัญชี</button><p id="am" style="margin-top:10px;font-size:14px"></p></div></div>
+<div id="hint">ลากเพื่อหมุน · บีบหรือเลื่อนล้อเพื่อซูม · แตะสติกเกอร์เพื่อเปิด</div>
+<div id="zb"><button id="zi" type="button" aria-label="ซูมเข้า">＋</button><button id="zo" type="button" aria-label="ซูมออก">－</button></div>
+<div id="flash"></div>
+<div id="ov"><div class="panel" id="pn"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const $=id=>document.getElementById(id),rm=matchMedia('(prefers-reduced-motion: reduce)').matches,S=new Date(2026,8,15);
+let bz=16,zc=1,zt=1;
+// ===== แก้ตรงนี้ได้ =====
+// gif: path ไฟล์ gif เช่น 'gifs/letter.gif' (เว้นว่าง = ใช้อีโมจิ)
+const CFG=[
+ {type:'letter',label:'จดหมาย',emoji:'💌',gif:''},
+ {type:'time',label:'เวลาของเรา',emoji:'⏳',gif:''},
+ {type:'music',label:'เพลง',emoji:'🎵',gif:''},
+ {type:'game',label:'มินิเกม',emoji:'🎮',gif:''},
+ {type:'fortune',label:'คำทำนาย',emoji:'🔮',gif:''}
+];
+// หัวใจ 1 ดวง ต่อ 1 คู่ รูป+ข้อความ ใส่เพิ่มได้ไม่จำกัด (img เช่น 'photos/1.jpg')
+const HEART={emoji:'💗',gif:''};
+const MEM=[
+ {img:'',title:'ความทรงจำที่ 1',text:'ข้อความคู่กับรูปที่ 1'},
+ {img:'',title:'ความทรงจำที่ 2',text:'ข้อความคู่กับรูปที่ 2'}
+];
+// Supabase (ปล่อย url ว่าง = ไม่ใช้ล็อกอิน ใช้ MEM ด้านบนแทน)
+const SB={url:'https://azyjfsbankjqavnnlxhx.supabase.co',key:'sb_publishable_-sz0pUmnVrN72jaoRknayQ_i-iUR27N'};
+if(SB.url){MEM.length=0;CFG.push({type:'add',label:'เพิ่มความทรงจำ',emoji:'➕',gif:''})}
+// ===== จบส่วนที่แก้ได้ =====
+const R=new THREE.WebGLRenderer({canvas:$('gl'),alpha:true,antialias:true}),sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(60,1,.1,300),cc=new THREE.Color();
+R.setPixelRatio(Math.min(devicePixelRatio,2));
+const tx=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,'#fff');r.addColorStop(.35,'#ffffffaa');r.addColorStop(1,'#fff0');g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c)})();
+function pts(p,c,sz,op){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));g.setAttribute('color',new THREE.BufferAttribute(c,3));return new THREE.Points(g,new THREE.PointsMaterial({map:tx,size:sz,vertexColors:true,transparent:true,opacity:op,blending:THREE.AdditiveBlending,depthWrite:false}))}
+// intro stars
+const SN=2200,sp=new Float32Array(SN*3),sk=new Float32Array(SN*3);
+for(let i=0;i<SN;i++){const r=25+Math.random()*60,a=Math.random()*6.283,b=Math.acos(2*Math.random()-1);sp.set([r*Math.sin(b)*Math.cos(a),r*Math.cos(b),r*Math.sin(b)*Math.sin(a)],i*3);cc.setHSL(.6+Math.random()*.15,.5,.75+Math.random()*.2);sk.set([cc.r,cc.g,cc.b],i*3)}
+const stars=pts(sp,sk,.42,.95);sc.add(stars);
+// galaxy + accretion ring + heart
+const G=new THREE.Group();G.visible=false;G.scale.setScalar(.001);sc.add(G);
+const N=6500,gp=new Float32Array(N*3),gc=new Float32Array(N*3),c1=new THREE.Color('#ffb0c8'),c2=new THREE.Color('#7f8cff');
+for(let i=0;i<N;i++){const r=1.5+Math.pow(Math.random(),1.4)*14,an=r*.55+(i%3)*2.094,s=(Math.random()-.5)*(2.6-r*.1);gp.set([Math.cos(an)*r+s,(Math.random()-.5)*(1.4-r*.06),Math.sin(an)*r+s],i*3);cc.copy(c1).lerp(c2,r/15);gc.set([cc.r,cc.g,cc.b],i*3)}
+const disc=pts(gp,gc,.13,.8);G.add(disc);
+const AN=2600,ap=new Float32Array(AN*3),ak=new Float32Array(AN*3),c3=new THREE.Color('#fff3c4'),c4=new THREE.Color('#ff5a9c');
+for(let i=0;i<AN;i++){const r=1.9+Math.random()*2.8,an=Math.random()*6.283;ap.set([Math.cos(an)*r,(Math.random()-.5)*.18,Math.sin(an)*r],i*3);cc.copy(c3).lerp(c4,(r-1.9)/2.8);ak.set([cc.r,cc.g,cc.b],i*3)}
+const acc=pts(ap,ak,.14,.95);G.add(acc);
+const HN=1500,hlp=new Float32Array(HN*3),hlk=new Float32Array(HN*3);
+for(let i=0;i<HN;i++){const r=1.55+Math.random()*.3,an=Math.random()*6.283;hlp.set([Math.cos(an)*r,Math.sin(an)*r,(Math.random()-.5)*.1],i*3);cc.set(Math.random()<.5?'#fff3c4':'#ffb0c8');hlk.set([cc.r,cc.g,cc.b],i*3)}
+const halo=pts(hlp,hlk,.12,.9);G.add(halo);
+G.add(new THREE.Mesh(new THREE.SphereGeometry(1.5,32,24),new THREE.MeshBasicMaterial({color:0x000000})));
+const M=2600,hp=new Float32Array(M*3),hk=new Float32Array(M*3);
+for(let i=0;i<M;i++){const t=Math.random()*6.283,k=Math.random()<.5?1:Math.sqrt(Math.random()),x=16*Math.pow(Math.sin(t),3),y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);hp.set([x*k*.2,(y*k-2)*.2,(Math.random()-.5)*2.6*(1.1-k*.5)],i*3);cc.set(Math.random()<.7?'#ff7fa6':'#ffd98a');hk.set([cc.r,cc.g,cc.b],i*3)}
+const hrt=pts(hp,hk,.15,1);hrt.scale.setScalar(.3);hrt.position.y=3.8;G.add(hrt);
+function fit(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;bz=Math.max(16,9.5/(w/h));cam.position.z=bz*zc;cam.updateProjectionMatrix()}
+fit();addEventListener('resize',fit);
+// stickers + floating words
+const I=[];
+function add(el,p,d,chip){document.body.appendChild(el);I.push({el,p,d,chip})}
+function mk(label,emoji,gif,fn){const el=document.createElement('button'),sm='<small>'+label+'</small>';el.className='stk';el.setAttribute('aria-label',label);
+ if(gif){el.classList.add('g');el.innerHTML='<img alt="" draggable="false" src="'+gif+'">'+sm;el.firstChild.onerror=()=>{el.classList.remove('g');el.innerHTML=emoji+sm}}else el.innerHTML=emoji+sm;
+ el.onclick=fn;return el}
+function spot(i,n){const a=i/n*6.283+Math.random()*.5,r=3.8+Math.random()*2.4+Math.min(3,n*.1);return new THREE.Vector3(Math.cos(a)*r,(Math.random()-.5)*2.4,Math.sin(a)*r)}
+const SL=CFG.length+MEM.length;
+CFG.forEach((s,i)=>add(mk(s.label,s.emoji,s.gif,()=>open(s.type)),spot(i,SL),i*.2,0));
+MEM.forEach((m,j)=>add(mk(m.label||'ความทรงจำ '+(j+1),HEART.emoji,HEART.gif,()=>open('mem',m)),spot(CFG.length+j,SL),(CFG.length+j)*.2,0));
+['รักนะ','คิดถึง','โบ๊ท ❤ โอปอ','2 เดือน','✦','เธอคือดาวของฉัน','♡','ตลอดไป'].forEach((t,i)=>{const el=document.createElement('span');el.className='chip';el.textContent=t;const a=Math.random()*6.283,r=2.8+Math.random()*4.5;add(el,new THREE.Vector3(Math.cos(a)*r,(Math.random()-.5)*5,Math.sin(a)*r),.4+i*.12,1)});
+const v=new THREE.Vector3();
+function place(it,e){v.copy(it.p).multiplyScalar(e);G.localToWorld(v);const d=v.distanceTo(cam.position);v.project(cam);const x=(v.x+1)/2*innerWidth,y=(1-v.y)/2*innerHeight,s=Math.max(.25,Math.min(1.4,17/d))*(.4+.6*e);
+ it.el.style.transform='translate('+x+'px,'+y+'px)'+(it.chip?' translate(-50%,-50%)':'')+' scale('+s+')';it.el.style.opacity=v.z<1?e:0;it.el.style.zIndex=2+Math.round((1-v.z)*500)}
+// state + input
+let ph='intro',t0=0,hs=0,hpr=0,yaw=0,pit=.85,vy=0,dr=false,lx=0,ly=0;
+const hb=$('hb');
+hb.addEventListener('pointerdown',e=>{e.preventDefault();if(ph==='intro')hs=performance.now()});
+hb.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();start()}});
+addEventListener('pointerup',()=>{hs=0;dr=false});addEventListener('pointercancel',()=>{hs=0;dr=false});
+addEventListener('pointerdown',e=>{if(ph!=='gal'||e.target.closest('.stk,#ov,#zb'))return;dr=true;lx=e.clientX;ly=e.clientY});
+addEventListener('pointermove',e=>{if(!dr)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;yaw+=dx*.006;pit=Math.max(-1.4,Math.min(1.4,pit+dy*.006));vy=dx*.36});
+function start(){if(ph!=='intro')return;ph='warp';t0=performance.now();hs=0;hpr=0;cam.position.x=cam.position.y=0;$('intro').classList.add('off');$('flash').classList.add('on');G.visible=true}
+let last=0;
+function frame(now){const dt=Math.min(.05,(now-last)/1000||0),t=now/1000;last=now;zc+=(zt-zc)*Math.min(1,dt*8);cam.position.z=bz*zc;
+ if(ph==='intro'){hpr=hs?Math.min(1,(now-hs)/1800):Math.max(0,hpr-dt*1.5);$('fill').setAttribute('y',90-hpr*90);stars.rotation.y+=dt*(.03+hpr*1.2);cam.position.x=(Math.random()-.5)*hpr*.3;cam.position.y=(Math.random()-.5)*hpr*.3;if(hpr>=1)start()}
+ else{const u=Math.min(1,(now-t0)/(rm?600:3200));
+  if(ph==='warp'){const s=Math.sin(Math.PI*u),g=Math.max(0,(u-.25)/.75);stars.scale.setScalar(1+14*s);cam.fov=60+35*s;cam.updateProjectionMatrix();stars.rotation.y+=dt*3*s;G.scale.setScalar(.001+(1-Math.pow(1-g,3)));yaw+=dt*8*(1-g);
+   if(u>=1){ph='gal';document.body.classList.add('gal');$('hint').style.opacity=1;stars.scale.setScalar(1);cam.fov=60;cam.updateProjectionMatrix()}}
+  else{stars.rotation.y+=dt*.01;if(!dr){yaw+=(vy+(rm?0:.1))*dt;vy*=.95}}
+  G.rotation.set(pit,yaw,0);if(!rm){disc.rotation.y+=dt*.03;acc.rotation.y+=dt*.6}
+  hrt.scale.setScalar(.3*(1+(rm?0:Math.pow(Math.max(0,Math.sin(t*3)),10)*.12)));hrt.rotation.y=t*.5;hrt.position.y=3.8+Math.sin(t*1.5)*.15;
+  G.updateMatrixWorld(true);halo.quaternion.copy(G.quaternion).invert().multiply(cam.quaternion);
+  for(const it of I){const x=Math.min(1,Math.max(0,(now-t0-(rm?0:1500)-it.d*1000)/1400));place(it,1-Math.pow(1-x,3))}}
+ R.render(sc,cam);requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+// zoom: wheel, pinch, buttons
+const pt=new Map(),clz=v=>Math.max(.5,Math.min(2.2,v));let pd=0;
+function pdist(){const a=[...pt.values()];return Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1])||1}
+addEventListener('wheel',e=>{if(ph==='gal'&&!e.target.closest('#ov'))zt=clz(zt*(1+e.deltaY*.0012))},{passive:true});
+addEventListener('pointerdown',e=>{pt.set(e.pointerId,[e.clientX,e.clientY]);if(pt.size===2){dr=false;pd=pdist()}});
+addEventListener('pointermove',e=>{if(!pt.has(e.pointerId))return;pt.set(e.pointerId,[e.clientX,e.clientY]);if(pt.size===2&&ph==='gal'){const d=pdist();if(pd)zt=clz(zt*pd/d);pd=d;dr=false}});
+const pu=e=>{pt.delete(e.pointerId);pd=0};addEventListener('pointerup',pu);addEventListener('pointercancel',pu);
+$('zi').onclick=()=>{zt=clz(zt*.8)};$('zo').onclick=()=>{zt=clz(zt*1.25)};
+// modal
+let cl=null;
+function open(id,arg){$('pn').innerHTML='<button id="x" aria-label="ปิด">✕</button><div id="bd"></div>';V[id]($('bd'),arg);$('ov').classList.add('on');$('x').onclick=close}
+function close(){if(cl){cl();cl=null}$('ov').classList.remove('on')}
+$('ov').addEventListener('pointerdown',e=>{if(e.target===$('ov'))close()});
+// music (generated melody, swap for a real song later)
+let au,mus=null,stp=0;const CH=[[261.6,329.6,392,523.3],[196,246.9,293.7,392],[220,261.6,329.6,440],[174.6,220,261.6,349.2]];
+function note(f,t,d,vl){const o=au.createOscillator(),g=au.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vl,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(au.destination);o.start(t);o.stop(t+d)}
+function toggle(){if(mus){clearInterval(mus);mus=null;return}au=au||new(window.AudioContext||window.webkitAudioContext)();au.resume();mus=setInterval(()=>{const c=CH[(stp>>3)%4],t=au.currentTime;note(c[stp%4],t,1.2,.12);if(stp%8===0)note(c[0]/2,t,3.2,.1);stp++},420)}
+const LT='ถึงโอปอ\n\nสองเดือนที่ผ่านมา เวลาเดินเร็วจนน่าแปลกใจ\nทุกวันที่มีเธออยู่ด้วย มันไม่ธรรมดาเลยสักวัน\n\nขอบคุณที่ฟังเรื่องของฉัน ที่หัวเราะไปด้วยกัน\nและที่อยู่ตรงนี้ในวันที่ฉันต้องการที่สุด\n\nบนฟ้ามีดาวเป็นล้านดวง\nแต่ฉันเลือกมองดวงเดียวมาตลอด\n\nอีกหลายเดือน หลายปีข้างหน้า\nขอไปด้วยกันนะ\n\nรักเสมอ\nโบ๊ท';
+const FT=['เร็วๆ นี้ จะมีมื้ออร่อยที่ได้กินด้วยกัน','ดาวบอกว่า วันนี้ควรบอกรักกัน','มีเซอร์ไพรส์ตัวเล็กๆ กำลังเดินทางมา','ปีหน้า เรายังอยู่ด้วยกัน ดาวยืนยัน','สัปดาห์นี้ ควรมีกอดอย่างน้อยสามครั้ง','ใครยิ้มก่อน คนนั้นแพ้ แต่ได้ที่เหลือทั้งหมด'];
+const V={
+letter(b){b.innerHTML='<h3>จดหมายถึงโอปอ</h3><p id="ty"></p>';let i=0,tm;(function n(){$('ty').textContent=LT.slice(0,++i);if(i<LT.length)tm=setTimeout(n,rm?0:50)})();cl=()=>clearTimeout(tm)},
+time(b){b.innerHTML='<h3>เราอยู่ด้วยกันมา</h3><div class="clk"><div><b class="big" id="d">0</b><span>วัน</span></div><div><b class="big" id="h">0</b><span>ชั่วโมง</span></div><div><b class="big" id="m">0</b><span>นาที</span></div><div><b class="big" id="s">0</b><span>วินาที</span></div></div><p style="margin-top:16px;color:var(--mute)">ตั้งแต่ 15 กันยายน 2569</p>';
+ const u=()=>{const t=Math.max(0,Date.now()-S);$('d').textContent=Math.floor(t/864e5);$('h').textContent=Math.floor(t/36e5)%24;$('m').textContent=Math.floor(t/6e4)%60;$('s').textContent=Math.floor(t/1e3)%60};u();const iv=setInterval(u,1000);cl=()=>clearInterval(iv)},
+music(b){b.innerHTML='<h3>เพลงของเรา</h3><div class="eq" id="eq"><i></i><i style="animation-delay:-.2s"></i><i style="animation-delay:-.5s"></i><i style="animation-delay:-.3s"></i><i style="animation-delay:-.7s"></i></div><p style="color:var(--mute)">ทำนองตัวอย่าง รอใส่เพลงของเราทีหลัง</p><button class="btn" id="pl"></button>';
+ const r=()=>{$('pl').textContent=mus?'⏸ หยุดเพลง':'▶ เล่นเพลง';$('eq').className=mus?'eq':'eq off'};r();$('pl').onclick=()=>{toggle();r()}},
+game(b){b.innerHTML='<h3>จับดาว</h3><p>แตะดาวที่ร่วงลงมาให้ได้มากที่สุดใน 20 วินาที หัวใจได้ 3 คะแนน</p><div id="gm"></div><p id="sc" style="margin-top:8px">คะแนน 0</p><button class="btn" id="st">เริ่มเลย</button>';
+ let n=0,tl=0,a,k;const stop=()=>{clearInterval(a);clearInterval(k)};cl=stop,txt=()=>$('sc').textContent='คะแนน '+n+' · เหลือ '+tl+' วิ';
+ $('st').onclick=()=>{stop();n=0;tl=20;$('gm').innerHTML='';txt();$('st').style.display='none';
+  a=setInterval(()=>{const s=document.createElement('b'),h=Math.random()<.2;s.textContent=h?'💗':'✦';s.style.cssText='left:'+(Math.random()*80+4)+'%;color:'+(Math.random()<.5?'#ffd98a':'#ff9db8')+';animation-duration:'+(2+Math.random()*1.6)+'s';s.onpointerdown=()=>{n+=h?3:1;s.remove();txt()};s.onanimationend=()=>s.remove();$('gm').appendChild(s)},rm?700:420);
+  k=setInterval(()=>{tl--;txt();if(tl<=0){stop();$('gm').innerHTML='';$('sc').innerHTML='เก็บได้ '+n+' คะแนน<br>'+(n>=30?'เก่งมาก ดาวดวงที่สวยที่สุดยังเป็นโอปอเหมือนเดิม':'ไม่เป็นไร ดาวทั้งฟ้าก็ไม่สวยเท่าโอปอ');$('st').style.display='';$('st').textContent='เล่นอีกครั้ง'}},1000)}},
+add(b){b.innerHTML='<h3>เพิ่มความทรงจำ</h3><input id="ft" class="in" maxlength="60" placeholder="หัวข้อ (ไม่ใส่ก็ได้)"><textarea id="fy" class="in" rows="4" maxlength="800" placeholder="เขียนข้อความคู่กับรูป..."></textarea><label class="btn" style="display:inline-block">📷 เลือกรูป<input id="ff" type="file" accept="image/*" hidden></label><p id="fn" style="color:var(--mute);font-size:14px"></p><button class="btn" id="fs" type="button">บันทึก ❤</button><p id="fm" style="margin-top:8px"></p><button class="btn ghost" id="lo" type="button" style="margin-top:14px">ออกจากระบบ</button>';
+ $('ff').onchange=()=>{$('fn').textContent=$('ff').files[0]?$('ff').files[0].name:''};
+ $('lo').onclick=()=>sb.auth.signOut().then(()=>location.reload());
+ $('fs').onclick=async()=>{const f=$('ff').files[0],tt=$('fy').value.trim();if(!tt&&!f){$('fm').textContent='ใส่รูปหรือข้อความอย่างน้อยหนึ่งอย่าง';return}
+  $('fs').disabled=true;$('fm').textContent='กำลังบันทึก...';
+  try{let path=null;if(f){const blob=await shrink(f),u=(await sb.auth.getUser()).data.user;path=u.id+'/'+Date.now()+'.jpg';const up=await sb.storage.from('photos').upload(path,blob,{contentType:'image/jpeg'});if(up.error)throw up.error}
+   const ins=await sb.from('memories').insert({title:$('ft').value.trim()||null,body:tt,image_path:path}).select('id,title,body,image_path').single();if(ins.error)throw ins.error;
+   await pushMem(ins.data,true);$('fm').textContent='บันทึกแล้ว มีหัวใจดวงใหม่ลอยขึ้นมา ❤';$('ft').value=$('fy').value=$('ff').value='';$('fn').textContent=''}
+  catch(e){$('fm').textContent='บันทึกไม่สำเร็จ: '+(e.message||e)}
+  $('fs').disabled=false}},
+mem(b,m){b.innerHTML='<h3>'+(m.title||'ความทรงจำของเรา')+'</h3>'+(m.img?'<img class="mi" alt="" src="'+m.img+'">':'<div class="ph1">✦ ใส่รูปตรงนี้</div>');const p=document.createElement('p');p.style.cssText='margin-top:14px;white-space:pre-wrap';p.textContent=m.text;b.appendChild(p)},
+fortune(b){b.innerHTML='<h3>คำทำนายความรัก</h3><p id="fr" style="min-height:5em;margin:12px 0;font-size:18px">แตะปุ่มเพื่อสุ่มคำทำนายจากดาว</p><button class="btn" id="fb">สุ่มเลย ✦</button>';$('fb').onclick=()=>{$('fr').textContent=FT[Math.random()*FT.length|0]}}
+};
+// ===== ล็อกอิน + ความทรงจำจาก Supabase =====
+let sb=null;
+function shrink(f){return new Promise((ok,no)=>{const im=new Image(),u=URL.createObjectURL(f);im.onload=()=>{const k=Math.min(1,1280/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>b?ok(b):no(new Error('บีบรูปไม่ได้')),'image/jpeg',.82)};im.onerror=()=>no(new Error('เปิดรูปไม่ได้'));im.src=u})}
+async function pushMem(r,live){let img='';if(r.image_path){const g=await sb.storage.from('photos').createSignedUrl(r.image_path,21600);img=g.data?g.data.signedUrl:''}
+ const m={img,title:r.title||'ความทรงจำ',text:r.body||''};MEM.push(m);
+ const d=live?(performance.now()-t0-1500)/1000:(CFG.length+MEM.length)*.2;
+ add(mk(m.title.slice(0,14),HEART.emoji,HEART.gif,()=>open('mem',m)),spot(Math.random()*8,8+MEM.length),d,0)}
+async function loadMem(){const r=await sb.from('memories').select('id,title,body,image_path').order('created_at');if(r.error||!r.data)return;await Promise.all(r.data.map(x=>pushMem(x)))}
+function am(t){$('am').textContent=t||''}
+async function afterLogin(){$('auth').style.display='none';document.body.classList.remove('lock');await loadMem()}
+if(SB.url&&window.supabase){document.body.classList.add('lock');sb=supabase.createClient(SB.url,SB.key);
+ sb.auth.getSession().then(({data})=>{if(data.session)afterLogin();else $('auth').style.display='grid'});
+ $('lg').onclick=async()=>{am('กำลังเข้าสู่ระบบ...');const r=await sb.auth.signInWithPassword({email:$('ae').value.trim(),password:$('ap').value});if(r.error)am('เข้าไม่ได้: '+r.error.message);else afterLogin()};
+ $('su').onclick=async()=>{am('กำลังสร้างบัญชี...');const r=await sb.auth.signUp({email:$('ae').value.trim(),password:$('ap').value});if(r.error)am('สร้างไม่ได้: '+r.error.message);else if(r.data.session)afterLogin();else am('ส่งอีเมลยืนยันแล้ว กดลิงก์ในอีเมล แล้วกลับมากดเข้าสู่ระบบ')}}
+</script>
+</body>
+</html>
