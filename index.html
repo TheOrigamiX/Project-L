@@ -150,7 +150,7 @@ function place(it,e){v.copy(it.p).multiplyScalar(e);G.localToWorld(v);const d=v.
 // ===== สวนจักรวาล: กุหลาบ 3D + ผีเสื้อ =====
 const RN=2800,NL=6,rp=new Float32Array(RN*3),rk=new Float32Array(RN*3),RD=[],rc1=new THREE.Color('#ffe6a8'),rc2=new THREE.Color('#ff4f8f');
 for(let i=0;i<RN;i++){const l=i%NL,v2=Math.random();RD.push({l,v:v2,a:Math.random()*6.283+l*.9});cc.copy(rc1).lerp(rc2,Math.min(1,(l+v2)/NL*1.15));rk.set([cc.r,cc.g,cc.b],i*3)}
-const rose=pts(rp,rk,.09,1);rose.visible=false;rose.frustumCulled=false;rose.scale.setScalar(.8);G.add(rose);
+const rose=pts(rp,rk,.09,1);rose.visible=false;rose.frustumCulled=false;rose.rotation.x=-Math.PI/2;rose.scale.setScalar(1.2);G.add(rose);
 function roseShape(op){for(let i=0;i<RN;i++){const d=RD[i],L=(d.l+1)/NL,sz=(.28+.72*L)*(.3+.7*d.v)*(1+.14*Math.sin(5*d.a+d.l*1.3)),f=op*(.25+.95*L)+(1-op)*.12,rho=sz*Math.sin(f)+.1*d.v*d.v*d.v*op*L;rp[i*3]=Math.cos(d.a)*rho;rp[i*3+1]=Math.sin(d.a)*rho;rp[i*3+2]=sz*Math.cos(f)-.5}
  rose.geometry.attributes.position.needsUpdate=true}
 roseShape(0);
