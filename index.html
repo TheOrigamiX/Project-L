@@ -49,7 +49,7 @@ body.gal .stk{pointer-events:auto}
 @keyframes eq{from{height:6px}to{height:38px}}
 .eq.off i{animation:none;height:6px}
 .stk.g{width:88px;height:88px;margin:-44px 0 0 -44px;background:none;border:0;box-shadow:none;backdrop-filter:none}
-.stk.g img{width:100%;height:100%;object-fit:contain;pointer-events:none;filter:drop-shadow(0 0 10px #b47bffaa)}
+.stk.g img{width:100%;height:100%;object-fit:cover;border-radius:50%;border:2px solid #ffffff88;box-shadow:0 0 18px #b47bffaa;pointer-events:none}
 .stk.g small{top:92px}
 .mi{max-width:100%;max-height:50vh;border-radius:16px;object-fit:contain}
 .ph1{aspect-ratio:4/3;border:1.5px dashed #ffffff55;border-radius:16px;display:grid;place-items:center;color:var(--mute)}
@@ -130,7 +130,7 @@ const halo=pts(hlp,hlk,.12,.9);G.add(halo);
 G.add(new THREE.Mesh(new THREE.SphereGeometry(1.5,32,24),new THREE.MeshBasicMaterial({color:0x000000})));
 const M=2600,hp=new Float32Array(M*3),hk=new Float32Array(M*3);
 for(let i=0;i<M;i++){const t=Math.random()*6.283,k=Math.random()<.5?1:Math.sqrt(Math.random()),x=16*Math.pow(Math.sin(t),3),y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);hp.set([x*k*.2,(y*k-2)*.2,(Math.random()-.5)*2.6*(1.1-k*.5)],i*3);cc.set(Math.random()<.7?'#ff7fa6':'#ffd98a');hk.set([cc.r,cc.g,cc.b],i*3)}
-const hrt=pts(hp,hk,.15,1);hrt.scale.setScalar(.3);hrt.position.y=3.8;G.add(hrt);
+const hrt=pts(hp,hk,.15,1);hrt.scale.setScalar(.38);hrt.position.y=3.8;G.add(hrt);
 function fit(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;bz=Math.max(16,9.5/(w/h));cam.position.z=bz*zc;cam.updateProjectionMatrix()}
 fit();addEventListener('resize',fit);
 // stickers + floating words
@@ -147,6 +147,37 @@ MEM.forEach((m,j)=>add(mk(m.label||'ความทรงจำ '+(j+1),HEART.em
 const v=new THREE.Vector3();
 function place(it,e){v.copy(it.p).multiplyScalar(e);G.localToWorld(v);const d=v.distanceTo(cam.position);v.project(cam);const x=(v.x+1)/2*innerWidth,y=(1-v.y)/2*innerHeight,s=Math.max(.25,Math.min(1.4,17/d))*(.4+.6*e);
  it.el.style.transform='translate('+x+'px,'+y+'px)'+(it.chip?' translate(-50%,-50%)':'')+' scale('+s+')';it.el.style.opacity=v.z<1?e:0;it.el.style.zIndex=2+Math.round((1-v.z)*500)}
+// ===== สวนจักรวาล: กุหลาบ 3D + ผีเสื้อ =====
+const RN=2800,NL=6,rp=new Float32Array(RN*3),rk=new Float32Array(RN*3),RD=[],rc1=new THREE.Color('#ffe6a8'),rc2=new THREE.Color('#ff4f8f');
+for(let i=0;i<RN;i++){const l=i%NL,v2=Math.random();RD.push({l,v:v2,a:Math.random()*6.283+l*.9});cc.copy(rc1).lerp(rc2,Math.min(1,(l+v2)/NL*1.15));rk.set([cc.r,cc.g,cc.b],i*3)}
+const rose=pts(rp,rk,.09,1);rose.visible=false;rose.frustumCulled=false;rose.scale.setScalar(.8);G.add(rose);
+function roseShape(op){for(let i=0;i<RN;i++){const d=RD[i],L=(d.l+1)/NL,sz=(.28+.72*L)*(.3+.7*d.v)*(1+.14*Math.sin(5*d.a+d.l*1.3)),f=op*(.25+.95*L)+(1-op)*.12,rho=sz*Math.sin(f)+.1*d.v*d.v*d.v*op*L;rp[i*3]=Math.cos(d.a)*rho;rp[i*3+1]=Math.sin(d.a)*rho;rp[i*3+2]=sz*Math.cos(f)-.5}
+ rose.geometry.attributes.position.needsUpdate=true}
+roseShape(0);
+const wtx=(()=>{const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');
+ function lobe(x,y,rx,ry,r){const q=g.createRadialGradient(x,y,0,x,y,r);q.addColorStop(0,'#fff');q.addColorStop(.6,'#ffffffaa');q.addColorStop(1,'#fff0');g.fillStyle=q;g.save();g.translate(x,y);g.scale(rx/r,ry/r);g.translate(-x,-y);g.beginPath();g.arc(x,y,r,0,6.283);g.fill();g.restore()}
+ lobe(46,40,44,34,34);lobe(34,92,28,24,24);return new THREE.CanvasTexture(c)})();
+function bfly(col){const o=new THREE.Group(),m=new THREE.MeshBasicMaterial({map:wtx,color:col,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide}),gm=new THREE.PlaneGeometry(1,1);gm.translate(.5,0,0);gm.rotateX(Math.PI/2);
+ const wr=new THREE.Group(),wl=new THREE.Group(),a=new THREE.Mesh(gm,m),b=new THREE.Mesh(gm,m);b.scale.x=-1;wr.add(a);wl.add(b);o.add(wr,wl);o.userData={wr,wl};return o}
+function flap(o,t,fp,sp){const f=.35+.8*Math.sin(t*(sp||12)+fp);o.userData.wr.rotation.z=f;o.userData.wl.rotation.z=-f}
+const BF=[],FL=[],BC=['#ff9db8','#c9a7ff','#ffd98a','#8fd3ff','#ff7fa6'];let tb=0,bl=0,px=0,py=0,lm=0;
+if(!rm){
+ for(let i=0;i<14;i++){const o=bfly(BC[i%5]),st=I[i]&&!I[i].chip?I[i]:null;o.visible=false;G.add(o);
+  BF.push({o,ph:st?Math.atan2(st.p.z,st.p.x):Math.random()*6.283,r:st?Math.hypot(st.p.x,st.p.z)+.6:3+Math.random()*4.5,w:(.25+Math.random()*.35)*(Math.random()<.5?-1:1),y:(Math.random()-.5)*3,s:.35+Math.random()*.25,d:1.8+i*.12,fp:Math.random()*6})}
+ for(let i=0;i<3;i++){const o=bfly(['#ffd98a','#ff9db8','#8fd3ff'][i]),pv=new THREE.Group();pv.add(o);pv.rotation.x=.9;pv.position.set(0,0,2.5);pv.visible=false;sc.add(pv);FL.push({pv,o,fp:i*2})}
+ addEventListener('pointermove',e=>{px=e.clientX;py=e.clientY;lm=performance.now()})}
+function garden(now,dt,t){
+ if(!tb&&now-t0>1600){tb=now;rose.visible=true}
+ if(tb&&bl<1){bl=rm?1:Math.min(1,(now-tb)/2600);roseShape(1-Math.pow(1-bl,3))}
+ rose.position.y=hrt.position.y-.34;rose.rotation.z+=dt*.25;
+ for(const b of BF){const e=Math.min(1,Math.max(0,(now-t0-b.d*1000)/2200)),k=1-Math.pow(1-e,3),a=b.ph+b.w*t+(1-k)*3,r=b.r*k,dr2=b.w>0?1:-1;b.o.visible=e>0;
+  b.o.position.set(Math.cos(a)*r,b.y*k+Math.sin(t*1.3+b.fp)*.6*k,Math.sin(a)*r);b.o.rotation.y=Math.atan2(-dr2*Math.sin(a),dr2*Math.cos(a));b.o.scale.setScalar(b.s*k*1.4);flap(b.o,t,b.fp,11+b.fp)}
+ if(ph==='gal'){const act=now-lm<2500;
+  for(const f of FL){f.pv.visible=true;let tx,ty;
+   if(act){v.set(px/innerWidth*2-1,1-py/innerHeight*2,.5).unproject(cam);v.sub(cam.position).normalize();const k=(2.5-cam.position.z)/v.z;tx=cam.position.x+v.x*k+Math.cos(t*2+f.fp)*.7;ty=cam.position.y+v.y*k+Math.sin(t*2.3+f.fp)*.7}
+   else{tx=Math.cos(t*.5+f.fp)*5.5;ty=Math.sin(t*.7+f.fp)*3.2+1}
+   const p=f.pv.position,ox=p.x,oy=p.y,q=Math.min(1,dt*(act?2.5:1));p.x+=(tx-p.x)*q;p.y+=(ty-p.y)*q;
+   if(Math.hypot(p.x-ox,p.y-oy)>.001)f.o.rotation.y=Math.atan2(p.x-ox,-(p.y-oy));f.o.scale.setScalar(.6);flap(f.o,t,f.fp,14)}}}
 // state + input
 let ph='intro',t0=0,hs=0,hpr=0,yaw=0,pit=.85,vy=0,dr=false,lx=0,ly=0;
 const hb=$('hb');
@@ -164,8 +195,8 @@ function frame(now){const dt=Math.min(.05,(now-last)/1000||0),t=now/1000;last=no
    if(u>=1){ph='gal';document.body.classList.add('gal');$('hint').style.opacity=1;stars.scale.setScalar(1);cam.fov=60;cam.updateProjectionMatrix()}}
   else{stars.rotation.y+=dt*.01;if(!dr){yaw+=(vy+(rm?0:.1))*dt;vy*=.95}}
   G.rotation.set(pit,yaw,0);if(!rm){disc.rotation.y+=dt*.03;acc.rotation.y+=dt*.6}
-  hrt.scale.setScalar(.3*(1+(rm?0:Math.pow(Math.max(0,Math.sin(t*3)),10)*.12)));hrt.rotation.y=t*.5;hrt.position.y=3.8+Math.sin(t*1.5)*.15;
-  G.updateMatrixWorld(true);halo.quaternion.copy(G.quaternion).invert().multiply(cam.quaternion);
+  hrt.scale.setScalar(.38*(1+(rm?0:Math.pow(Math.max(0,Math.sin(t*3)),10)*.12)));hrt.rotation.y=t*.5;hrt.position.y=3.8+Math.sin(t*1.5)*.15;
+  G.updateMatrixWorld(true);halo.quaternion.copy(G.quaternion).invert().multiply(cam.quaternion);garden(now,dt,t);
   for(const it of I){const x=Math.min(1,Math.max(0,(now-t0-(rm?0:1500)-it.d*1000)/1400));place(it,1-Math.pow(1-x,3))}}
  R.render(sc,cam);requestAnimationFrame(frame)}
 requestAnimationFrame(frame);
@@ -185,7 +216,7 @@ $('ov').addEventListener('pointerdown',e=>{if(e.target===$('ov'))close()});
 // music (generated melody, swap for a real song later)
 let au,mus=null,stp=0;const CH=[[261.6,329.6,392,523.3],[196,246.9,293.7,392],[220,261.6,329.6,440],[174.6,220,261.6,349.2]];
 function note(f,t,d,vl){const o=au.createOscillator(),g=au.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vl,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(au.destination);o.start(t);o.stop(t+d)}
-function toggle(){if(mus){clearInterval(mus);mus=null;return}au=au||new(window.AudioContext||window.webkitAudioContext)();au.resume();mus=setInterval(()=>{const c=CH[(stp>>3)%4],t=au.currentTime;note(c[stp%4],t,1.2,.12);if(stp%8===0)note(c[0]/2,t,3.2,.1);stp++},420)}
+function toggle(){if(songUrl){if(AU.paused){if(!AU.src)AU.src=songUrl;AU.play().catch(()=>{});mus=1}else{AU.pause();mus=null}return}if(mus){clearInterval(mus);mus=null;return}au=au||new(window.AudioContext||window.webkitAudioContext)();au.resume();mus=setInterval(()=>{const c=CH[(stp>>3)%4],t=au.currentTime;note(c[stp%4],t,1.2,.12);if(stp%8===0)note(c[0]/2,t,3.2,.1);stp++},420)}
 let LT='';
 const FT=['เร็วๆ นี้ จะมีมื้ออร่อยที่ได้กินด้วยกัน','ดาวบอกว่า วันนี้ควรบอกรักกัน','มีเซอร์ไพรส์ตัวเล็กๆ กำลังเดินทางมา','ปีหน้า เรายังอยู่ด้วยกัน ดาวยืนยัน','สัปดาห์นี้ ควรมีกอดอย่างน้อยสามครั้ง','ใครยิ้มก่อน คนนั้นแพ้ แต่ได้ที่เหลือทั้งหมด'];
 const V={
@@ -194,7 +225,7 @@ letter(b){b.innerHTML='<h3>จดหมายถึงโอปอ</h3><p id="ty
   $('ls').onclick=async()=>{$('lm').textContent='กำลังบันทึก...';const r=await sb.from('site_content').upsert({key:'letter',value:$('lt').value});if(r.error)$('lm').textContent='บันทึกไม่สำเร็จ: '+r.error.message;else{LT=$('lt').value;$('lm').textContent='บันทึกแล้ว ❤'}}}},
 time(b){b.innerHTML='<h3>เราอยู่ด้วยกันมา</h3><div class="clk"><div><b class="big" id="d">0</b><span>วัน</span></div><div><b class="big" id="h">0</b><span>ชั่วโมง</span></div><div><b class="big" id="m">0</b><span>นาที</span></div><div><b class="big" id="s">0</b><span>วินาที</span></div></div><p style="margin-top:16px;color:var(--mute)">ตั้งแต่ 15 กันยายน 2569</p>';
  const u=()=>{const t=Math.max(0,Date.now()-S);$('d').textContent=Math.floor(t/864e5);$('h').textContent=Math.floor(t/36e5)%24;$('m').textContent=Math.floor(t/6e4)%60;$('s').textContent=Math.floor(t/1e3)%60};u();const iv=setInterval(u,1000);cl=()=>clearInterval(iv)},
-music(b){b.innerHTML='<h3>เพลงของเรา</h3><div class="eq" id="eq"><i></i><i style="animation-delay:-.2s"></i><i style="animation-delay:-.5s"></i><i style="animation-delay:-.3s"></i><i style="animation-delay:-.7s"></i></div><p style="color:var(--mute)">ทำนองตัวอย่าง รอใส่เพลงของเราทีหลัง</p><button class="btn" id="pl"></button>';
+music(b){b.innerHTML='<h3>เพลงของเรา</h3><div class="eq" id="eq"><i></i><i style="animation-delay:-.2s"></i><i style="animation-delay:-.5s"></i><i style="animation-delay:-.3s"></i><i style="animation-delay:-.7s"></i></div><p style="color:var(--mute)">'+(songUrl?'เพลงที่เลือกไว้ให้เรา':'ทำนองตัวอย่าง รอใส่เพลงของเราทีหลัง')+'</p><button class="btn" id="pl"></button>';
  const r=()=>{$('pl').textContent=mus?'⏸ หยุดเพลง':'▶ เล่นเพลง';$('eq').className=mus?'eq':'eq off'};r();$('pl').onclick=()=>{toggle();r()}},
 game(b){b.innerHTML='<h3>จับดาว</h3><p>แตะดาวที่ร่วงลงมาให้ได้มากที่สุดใน 20 วินาที หัวใจได้ 3 คะแนน</p><div id="gm"></div><p id="sc" style="margin-top:8px">คะแนน 0</p><button class="btn" id="st">เริ่มเลย</button>';
  let n=0,tl=0,a,k;const stop=()=>{clearInterval(a);clearInterval(k)};cl=stop,txt=()=>$('sc').textContent='คะแนน '+n+' · เหลือ '+tl+' วิ';
@@ -222,6 +253,8 @@ async function pushMem(r,live){let img='';if(r.image_path){const g=await sb.stor
  const d=live?(performance.now()-t0-1500)/1000:(CFG.length+MEM.length)*.2;
  add(mk(m.title.slice(0,14),HEART.emoji,HEART.gif,()=>open('mem',m)),spot(Math.random()*8,8+MEM.length),d,0)}
 async function loadMem(){const r=await sb.from('memories').select('id,title,body,image_path').order('created_at');if(r.error||!r.data)return;await Promise.all(r.data.map(x=>pushMem(x)))}
+const AU=new Audio();AU.loop=true;let songUrl='';
+async function loadSong(){const l=await sb.storage.from('photos').list('music');if(l.error||!l.data)return;const f=l.data.find(x=>/\.(mp3|m4a|aac|ogg|wav)$/i.test(x.name));if(!f)return;const g=await sb.storage.from('photos').createSignedUrl('music/'+f.name,21600);if(g.data)songUrl=g.data.signedUrl}
 function setGif(el,url){const e=el.dataset.e,sm='<small>'+el.dataset.l+'</small>';el.classList.add('g');el.innerHTML='<img alt="" draggable="false" src="'+url+'">'+sm;el.firstChild.onerror=()=>{el.classList.remove('g');el.innerHTML=e+sm}}
 async function loadStickers(){const l=await sb.storage.from('photos').list('stickers');if(l.error||!l.data)return;
  for(const f of l.data){const m=/^([a-z]+)\.gif$/.exec(f.name);if(!m)continue;const g=await sb.storage.from('photos').createSignedUrl('stickers/'+f.name,21600);if(!g.data)continue;
@@ -229,7 +262,7 @@ async function loadStickers(){const l=await sb.storage.from('photos').list('stic
 async function loadLetter(){const c=await sb.from('site_content').select('value').eq('key','letter').maybeSingle();if(c.data)LT=c.data.value}
 const em=u=>u.trim().toLowerCase().replace(/[^a-z0-9._-]/g,'')+'@example.com';
 function am(t){$('am').textContent=t||''}
-async function afterLogin(){$('auth').style.display='none';document.body.classList.remove('lock');document.body.classList.add('inn');await Promise.all([loadStickers(),loadLetter()]);await loadMem()}
+async function afterLogin(){$('auth').style.display='none';document.body.classList.remove('lock');document.body.classList.add('inn');await Promise.all([loadStickers(),loadLetter(),loadSong()]);await loadMem()}
 if(SB.url&&window.supabase){document.body.classList.add('lock');sb=supabase.createClient(SB.url,SB.key);$('lo2').onclick=()=>sb.auth.signOut().then(()=>location.reload());
  sb.auth.getSession().then(({data})=>{if(data.session)afterLogin();else $('auth').style.display='grid'});
  $('lg').onclick=async()=>{am('กำลังเข้าสู่ระบบ...');const r=await sb.auth.signInWithPassword({email:em($('ae').value),password:$('ap').value});if(r.error)am('เข้าไม่ได้: '+r.error.message);else afterLogin()};
