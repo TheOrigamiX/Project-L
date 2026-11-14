@@ -59,6 +59,8 @@ body.gal #zb{display:flex}
 .in{display:block;width:100%;background:#ffffff14;border:1px solid #ffffff44;border-radius:12px;color:var(--moon);font:400 16px Mali,sans-serif;padding:10px 12px;margin-bottom:10px;user-select:text;-webkit-user-select:text}
 #auth{position:fixed;inset:0;z-index:1500;display:none;place-items:center;padding:18px;background:#070b1fcc;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 body.lock #intro{visibility:hidden}
+#lo2{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:10px;z-index:900;display:none;background:#ffffff14;border:1px solid #ffffff44;border-radius:999px;color:var(--mute);font:400 12px Mali,sans-serif;padding:6px 12px;min-height:32px;cursor:pointer;backdrop-filter:blur(4px)}
+body.gal.inn #lo2{display:block}
 .btn.ghost{background:none;color:var(--mute);border:1px solid #ffffff44}
 @media(prefers-reduced-motion:reduce){#hb{animation:none}.eq i{animation:none}}
 </style>
@@ -75,8 +77,9 @@ body.lock #intro{visibility:hidden}
   </button>
   <p>กดหัวใจค้างไว้</p>
 </div>
-<div id="auth"><div class="panel"><h3>เฉพาะโบ๊ทกับโอปอ</h3><input id="ae" class="in" type="text" placeholder="ชื่อผู้ใช้ (boat หรือ opal)" autocomplete="username" autocapitalize="none" spellcheck="false"><input id="ap" class="in" type="password" placeholder="รหัสผ่าน" autocomplete="current-password"><button class="btn" id="lg" type="button">เข้าสู่ระบบ</button><p id="am" style="margin-top:10px;font-size:14px"></p></div></div>
+<div id="auth"><div class="panel"><h3>เฉพาะคนสำคัญ</h3><input id="ae" class="in" type="text" placeholder="ชื่อผู้ใช้" autocomplete="username" autocapitalize="none" spellcheck="false"><input id="ap" class="in" type="password" placeholder="รหัสผ่าน" autocomplete="current-password"><button class="btn" id="lg" type="button">เข้าสู่ระบบ</button><p id="am" style="margin-top:10px;font-size:14px"></p></div></div>
 <div id="hint">ลากเพื่อหมุน · บีบหรือเลื่อนล้อเพื่อซูม · แตะสติกเกอร์เพื่อเปิด</div>
+<button id="lo2" type="button">ออกจากระบบ</button>
 <div id="zb"><button id="zi" type="button" aria-label="ซูมเข้า">＋</button><button id="zo" type="button" aria-label="ซูมออก">－</button></div>
 <div id="flash"></div>
 <div id="ov"><div class="panel" id="pn"></div></div>
@@ -138,7 +141,7 @@ function mk(label,emoji,gif,fn){const el=document.createElement('button'),sm='<s
  el.onclick=fn;return el}
 function spot(i,n){const a=i/n*6.283+Math.random()*.5,r=3.8+Math.random()*2.4+Math.min(3,n*.1);return new THREE.Vector3(Math.cos(a)*r,(Math.random()-.5)*2.4,Math.sin(a)*r)}
 const SL=CFG.length+MEM.length;
-CFG.forEach((s,i)=>add(mk(s.label,s.emoji,s.gif,()=>open(s.type)),spot(i,SL),i*.2,0));
+CFG.forEach((s,i)=>{const el=mk(s.label,s.emoji,s.gif,()=>open(s.type));el.dataset.t=s.type;el.dataset.e=s.emoji;el.dataset.l=s.label;add(el,spot(i,SL),i*.2,0)});
 MEM.forEach((m,j)=>add(mk(m.label||'ความทรงจำ '+(j+1),HEART.emoji,HEART.gif,()=>open('mem',m)),spot(CFG.length+j,SL),(CFG.length+j)*.2,0));
 ['รักนะ','คิดถึง','โบ๊ท ❤ โอปอ','2 เดือน','✦','เธอคือดาวของฉัน','♡','ตลอดไป'].forEach((t,i)=>{const el=document.createElement('span');el.className='chip';el.textContent=t;const a=Math.random()*6.283,r=2.8+Math.random()*4.5;add(el,new THREE.Vector3(Math.cos(a)*r,(Math.random()-.5)*5,Math.sin(a)*r),.4+i*.12,1)});
 const v=new THREE.Vector3();
@@ -150,7 +153,7 @@ const hb=$('hb');
 hb.addEventListener('pointerdown',e=>{e.preventDefault();if(ph==='intro')hs=performance.now()});
 hb.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();start()}});
 addEventListener('pointerup',()=>{hs=0;dr=false});addEventListener('pointercancel',()=>{hs=0;dr=false});
-addEventListener('pointerdown',e=>{if(ph!=='gal'||e.target.closest('.stk,#ov,#zb'))return;dr=true;lx=e.clientX;ly=e.clientY});
+addEventListener('pointerdown',e=>{if(ph!=='gal'||e.target.closest('.stk,#ov,#zb,#lo2'))return;dr=true;lx=e.clientX;ly=e.clientY});
 addEventListener('pointermove',e=>{if(!dr)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;yaw+=dx*.006;pit=Math.max(-1.4,Math.min(1.4,pit+dy*.006));vy=dx*.36});
 function start(){if(ph!=='intro')return;ph='warp';t0=performance.now();hs=0;hpr=0;cam.position.x=cam.position.y=0;$('intro').classList.add('off');$('flash').classList.add('on');G.visible=true}
 let last=0;
@@ -183,10 +186,12 @@ $('ov').addEventListener('pointerdown',e=>{if(e.target===$('ov'))close()});
 let au,mus=null,stp=0;const CH=[[261.6,329.6,392,523.3],[196,246.9,293.7,392],[220,261.6,329.6,440],[174.6,220,261.6,349.2]];
 function note(f,t,d,vl){const o=au.createOscillator(),g=au.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vl,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(au.destination);o.start(t);o.stop(t+d)}
 function toggle(){if(mus){clearInterval(mus);mus=null;return}au=au||new(window.AudioContext||window.webkitAudioContext)();au.resume();mus=setInterval(()=>{const c=CH[(stp>>3)%4],t=au.currentTime;note(c[stp%4],t,1.2,.12);if(stp%8===0)note(c[0]/2,t,3.2,.1);stp++},420)}
-const LT='ถึงโอปอ\n\nสองเดือนที่ผ่านมา เวลาเดินเร็วจนน่าแปลกใจ\nทุกวันที่มีเธออยู่ด้วย มันไม่ธรรมดาเลยสักวัน\n\nขอบคุณที่ฟังเรื่องของฉัน ที่หัวเราะไปด้วยกัน\nและที่อยู่ตรงนี้ในวันที่ฉันต้องการที่สุด\n\nบนฟ้ามีดาวเป็นล้านดวง\nแต่ฉันเลือกมองดวงเดียวมาตลอด\n\nอีกหลายเดือน หลายปีข้างหน้า\nขอไปด้วยกันนะ\n\nรักเสมอ\nโบ๊ท';
+let LT='';
 const FT=['เร็วๆ นี้ จะมีมื้ออร่อยที่ได้กินด้วยกัน','ดาวบอกว่า วันนี้ควรบอกรักกัน','มีเซอร์ไพรส์ตัวเล็กๆ กำลังเดินทางมา','ปีหน้า เรายังอยู่ด้วยกัน ดาวยืนยัน','สัปดาห์นี้ ควรมีกอดอย่างน้อยสามครั้ง','ใครยิ้มก่อน คนนั้นแพ้ แต่ได้ที่เหลือทั้งหมด'];
 const V={
-letter(b){b.innerHTML='<h3>จดหมายถึงโอปอ</h3><p id="ty"></p>';let i=0,tm;(function n(){$('ty').textContent=LT.slice(0,++i);if(i<LT.length)tm=setTimeout(n,rm?0:50)})();cl=()=>clearTimeout(tm)},
+letter(b){b.innerHTML='<h3>จดหมายถึงโอปอ</h3><p id="ty"></p>'+(sb?'<button class="btn ghost" id="le" type="button" style="margin-top:14px">✎ แก้ไขจดหมาย</button>':'');let i=0,tm;const T=LT||'ยังไม่มีจดหมาย กดแก้ไขจดหมายเพื่อเขียน';(function n(){$('ty').textContent=T.slice(0,++i);if(i<T.length)tm=setTimeout(n,rm?0:50)})();cl=()=>clearTimeout(tm);
+ if(sb)$('le').onclick=()=>{clearTimeout(tm);b.innerHTML='<h3>แก้ไขจดหมาย</h3><textarea id="lt" class="in" rows="12" maxlength="4000"></textarea><button class="btn" id="ls" type="button">บันทึก</button><p id="lm" style="margin-top:8px"></p>';$('lt').value=LT;
+  $('ls').onclick=async()=>{$('lm').textContent='กำลังบันทึก...';const r=await sb.from('site_content').upsert({key:'letter',value:$('lt').value});if(r.error)$('lm').textContent='บันทึกไม่สำเร็จ: '+r.error.message;else{LT=$('lt').value;$('lm').textContent='บันทึกแล้ว ❤'}}}},
 time(b){b.innerHTML='<h3>เราอยู่ด้วยกันมา</h3><div class="clk"><div><b class="big" id="d">0</b><span>วัน</span></div><div><b class="big" id="h">0</b><span>ชั่วโมง</span></div><div><b class="big" id="m">0</b><span>นาที</span></div><div><b class="big" id="s">0</b><span>วินาที</span></div></div><p style="margin-top:16px;color:var(--mute)">ตั้งแต่ 15 กันยายน 2569</p>';
  const u=()=>{const t=Math.max(0,Date.now()-S);$('d').textContent=Math.floor(t/864e5);$('h').textContent=Math.floor(t/36e5)%24;$('m').textContent=Math.floor(t/6e4)%60;$('s').textContent=Math.floor(t/1e3)%60};u();const iv=setInterval(u,1000);cl=()=>clearInterval(iv)},
 music(b){b.innerHTML='<h3>เพลงของเรา</h3><div class="eq" id="eq"><i></i><i style="animation-delay:-.2s"></i><i style="animation-delay:-.5s"></i><i style="animation-delay:-.3s"></i><i style="animation-delay:-.7s"></i></div><p style="color:var(--mute)">ทำนองตัวอย่าง รอใส่เพลงของเราทีหลัง</p><button class="btn" id="pl"></button>';
@@ -201,7 +206,7 @@ add(b){b.innerHTML='<h3>เพิ่มความทรงจำ</h3><input id
  $('lo').onclick=()=>sb.auth.signOut().then(()=>location.reload());
  $('fs').onclick=async()=>{const f=$('ff').files[0],tt=$('fy').value.trim();if(!tt&&!f){$('fm').textContent='ใส่รูปหรือข้อความอย่างน้อยหนึ่งอย่าง';return}
   $('fs').disabled=true;$('fm').textContent='กำลังบันทึก...';
-  try{let path=null;if(f){const blob=await shrink(f),u=(await sb.auth.getUser()).data.user;path=u.id+'/'+Date.now()+'.jpg';const up=await sb.storage.from('photos').upload(path,blob,{contentType:'image/jpeg'});if(up.error)throw up.error}
+  try{let path=null;if(f){const gif=f.type==='image/gif';if(gif&&f.size>5242880)throw new Error('GIF ใหญ่เกิน 5 MB');const blob=gif?f:await shrink(f),u=(await sb.auth.getUser()).data.user;path=u.id+'/'+Date.now()+(gif?'.gif':'.jpg');const up=await sb.storage.from('photos').upload(path,blob,{contentType:gif?'image/gif':'image/jpeg'});if(up.error)throw up.error}
    const ins=await sb.from('memories').insert({title:$('ft').value.trim()||null,body:tt,image_path:path}).select('id,title,body,image_path').single();if(ins.error)throw ins.error;
    await pushMem(ins.data,true);$('fm').textContent='บันทึกแล้ว มีหัวใจดวงใหม่ลอยขึ้นมา ❤';$('ft').value=$('fy').value=$('ff').value='';$('fn').textContent=''}
   catch(e){$('fm').textContent='บันทึกไม่สำเร็จ: '+(e.message||e)}
@@ -217,10 +222,15 @@ async function pushMem(r,live){let img='';if(r.image_path){const g=await sb.stor
  const d=live?(performance.now()-t0-1500)/1000:(CFG.length+MEM.length)*.2;
  add(mk(m.title.slice(0,14),HEART.emoji,HEART.gif,()=>open('mem',m)),spot(Math.random()*8,8+MEM.length),d,0)}
 async function loadMem(){const r=await sb.from('memories').select('id,title,body,image_path').order('created_at');if(r.error||!r.data)return;await Promise.all(r.data.map(x=>pushMem(x)))}
+function setGif(el,url){const e=el.dataset.e,sm='<small>'+el.dataset.l+'</small>';el.classList.add('g');el.innerHTML='<img alt="" draggable="false" src="'+url+'">'+sm;el.firstChild.onerror=()=>{el.classList.remove('g');el.innerHTML=e+sm}}
+async function loadStickers(){const l=await sb.storage.from('photos').list('stickers');if(l.error||!l.data)return;
+ for(const f of l.data){const m=/^([a-z]+)\.gif$/.exec(f.name);if(!m)continue;const g=await sb.storage.from('photos').createSignedUrl('stickers/'+f.name,21600);if(!g.data)continue;
+  if(m[1]==='heart')HEART.gif=g.data.signedUrl;else document.querySelectorAll('.stk[data-t="'+m[1]+'"]').forEach(el=>setGif(el,g.data.signedUrl))}}
+async function loadLetter(){const c=await sb.from('site_content').select('value').eq('key','letter').maybeSingle();if(c.data)LT=c.data.value}
 const em=u=>u.trim().toLowerCase().replace(/[^a-z0-9._-]/g,'')+'@example.com';
 function am(t){$('am').textContent=t||''}
-async function afterLogin(){$('auth').style.display='none';document.body.classList.remove('lock');await loadMem()}
-if(SB.url&&window.supabase){document.body.classList.add('lock');sb=supabase.createClient(SB.url,SB.key);
+async function afterLogin(){$('auth').style.display='none';document.body.classList.remove('lock');document.body.classList.add('inn');await Promise.all([loadStickers(),loadLetter()]);await loadMem()}
+if(SB.url&&window.supabase){document.body.classList.add('lock');sb=supabase.createClient(SB.url,SB.key);$('lo2').onclick=()=>sb.auth.signOut().then(()=>location.reload());
  sb.auth.getSession().then(({data})=>{if(data.session)afterLogin();else $('auth').style.display='grid'});
  $('lg').onclick=async()=>{am('กำลังเข้าสู่ระบบ...');const r=await sb.auth.signInWithPassword({email:em($('ae').value),password:$('ap').value});if(r.error)am('เข้าไม่ได้: '+r.error.message);else afterLogin()};
 }
