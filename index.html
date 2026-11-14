@@ -61,7 +61,7 @@ body.gal .stk{pointer-events:auto}
 .ar{color:var(--mute);font-size:14px;margin-bottom:10px}
 .rg{width:100%;accent-color:var(--rose);touch-action:none}
 .tm{display:flex;justify-content:space-between;font-size:12px;color:var(--mute)}
-.ct{display:flex;justify-content:center;align-items:center;gap:22px;margin:8px 0 14px}
+.ct{display:flex;justify-content:center;align-items:center;gap:10px;margin:8px 0 14px}
 .ct button{background:none;border:0;color:var(--moon);font-size:26px;cursor:pointer;min-width:44px;min-height:44px}
 .ct .pl2{background:#fff;color:#2a1040;border-radius:50%;width:56px;height:56px;font-size:22px}
 .ls{max-height:30vh;overflow:auto;border-top:1px solid #ffffff22;padding-top:6px}
@@ -69,6 +69,11 @@ body.gal .stk{pointer-events:auto}
 .tr.on{background:#ffffff14;color:var(--rose)}
 .tr .n{width:20px;color:var(--mute);font-size:13px}
 .tr small{display:block;color:var(--mute);font-size:12px}
+.pt{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px}
+.pt button{flex:none;background:#ffffff14;border:1px solid #ffffff33;border-radius:999px;color:var(--moon);font:400 13px Mali,sans-serif;padding:6px 14px;min-height:34px;cursor:pointer}
+.pt button.on{background:#fff;color:#2a1040}
+.ct button.on{color:var(--rose)}
+.vl{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .mi{max-width:100%;max-height:50vh;border-radius:16px;object-fit:contain}
 .ph1{aspect-ratio:4/3;border:1.5px dashed #ffffff55;border-radius:16px;display:grid;place-items:center;color:var(--mute)}
 #zb{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:900;display:none;flex-direction:column;gap:8px}
@@ -122,6 +127,10 @@ const MEM=[
  {img:'',title:'ความทรงจำที่ 1',text:'ข้อความคู่กับรูปที่ 1'},
  {img:'',title:'ความทรงจำที่ 2',text:'ข้อความคู่กับรูปที่ 2'}
 ];
+// Spotify: ใส่เพลย์ลิสต์/อัลบั้ม/เพลงจาก Spotify เป็นแท็บในเครื่องเล่น (ฟังเต็มเมื่อล็อกอิน Spotify ในเบราว์เซอร์)
+const SPOTIFY=[
+ // {name:'เพลย์ลิสต์ของเรา',url:'https://open.spotify.com/playlist/xxxxxxxx'}
+];
 // Supabase (ปล่อย url ว่าง = ไม่ใช้ล็อกอิน ใช้ MEM ด้านบนแทน)
 const SB={url:'https://azyjfsbankjqavnnlxhx.supabase.co',key:'sb_publishable_-sz0pUmnVrN72jaoRknayQ_i-iUR27N'};
 if(SB.url){MEM.length=0;CFG.push({type:'add',label:'เพิ่มความทรงจำ',emoji:'➕',gif:''})}
@@ -160,10 +169,10 @@ function mk(label,emoji,gif,fn){const el=document.createElement('button'),sm='<s
 function mkHeart(label,fn){const el=document.createElement('button'),sm=document.createElement('small');el.className='stk hs';el.setAttribute('aria-label',label);
  el.innerHTML='<svg viewBox="0 0 100 92" style="animation-delay:-'+(Math.random()*1.2).toFixed(2)+'s"><path d="M50 88C20 62 2 44 2 26 2 12 12 3 25 3c11 0 20 6 25 15C55 9 64 3 75 3c13 0 23 9 23 23 0 18-18 36-48 62z" fill="#ff2d55"/><path d="M22 14C14 16 9 23 10 31" stroke="#ffffff88" stroke-width="4" fill="none" stroke-linecap="round"/></svg>';
  sm.textContent=label;el.appendChild(sm);el.onclick=fn;return el}
-function spot(i,n){const a=i/n*6.283+Math.random()*.5,r=3.8+Math.random()*2.4+Math.min(3,n*.1);return new THREE.Vector3(Math.cos(a)*r,(Math.random()-.5)*2.4,Math.sin(a)*r)}
+function spot(i){const a=i*2.39996+Math.random()*.3,r=3.2+Math.sqrt(i+1)*1.15+Math.random()*.7;return new THREE.Vector3(Math.cos(a)*r,(Math.random()-.5)*2.6,Math.sin(a)*r)}
 const SL=CFG.length+MEM.length;
-CFG.forEach((s,i)=>{const el=mk(s.label,s.emoji,s.gif,()=>open(s.type));el.dataset.t=s.type;el.dataset.e=s.emoji;el.dataset.l=s.label;add(el,spot(i,SL),i*.2,0)});
-MEM.forEach((m,j)=>add(mkHeart(m.label||'ความทรงจำ '+(j+1),()=>open('mem',m)),spot(CFG.length+j,SL),(CFG.length+j)*.2,0));
+CFG.forEach((s,i)=>{const el=mk(s.label,s.emoji,s.gif,()=>open(s.type));el.dataset.t=s.type;el.dataset.e=s.emoji;el.dataset.l=s.label;add(el,spot(i),i*.2,0)});
+MEM.forEach((m,j)=>add(mkHeart(m.label||'ความทรงจำ '+(j+1),()=>open('mem',m)),spot(CFG.length+j),(CFG.length+j)*.2,0));
 ['รักนะ','คิดถึง','โบ๊ท ❤ โอปอ','2 เดือน','✦','เธอคือดาวของฉัน','♡','ตลอดไป'].forEach((t,i)=>{const el=document.createElement('span');el.className='chip';el.textContent=t;const a=Math.random()*6.283,r=2.8+Math.random()*4.5;add(el,new THREE.Vector3(Math.cos(a)*r,(Math.random()-.5)*5,Math.sin(a)*r),.4+i*.12,1)});
 const v=new THREE.Vector3();
 function place(it,e){v.copy(it.p).multiplyScalar(e);G.localToWorld(v);const d=v.distanceTo(cam.position);v.project(cam);const x=(v.x+1)/2*innerWidth,y=(1-v.y)/2*innerHeight,s=Math.max(.25,Math.min(1.4,17/d))*(.4+.6*e);
@@ -188,10 +197,10 @@ if(!rm){
  for(let i=0;i<3;i++){const o=bfly(['#ffd98a','#ff9db8','#8fd3ff'][i]),pv=new THREE.Group();pv.add(o);pv.rotation.x=.9;pv.position.set(0,0,2.5);pv.visible=false;sc.add(pv);FL.push({pv,o,fp:i*2})}
  addEventListener('pointermove',e=>{px=e.clientX;py=e.clientY;lm=performance.now()})}
 function garden(now,dt,t){
- if(!tb&&now-t0>1600){tb=now;rose.visible=true}
+ if(!tb&&now-t0>TEX+700){tb=now;rose.visible=true}
  if(tb&&bl<1){bl=rm?1:Math.min(1,(now-tb)/2600);roseShape(1-Math.pow(1-bl,3))}
  rose.position.y=hrt.position.y-.34;rose.rotation.z+=dt*.25;
- for(const b of BF){const e=Math.min(1,Math.max(0,(now-t0-b.d*1000)/2200)),k=1-Math.pow(1-e,3),a=b.ph+b.w*t+(1-k)*3,r=b.r*k,dr2=b.w>0?1:-1;b.o.visible=e>0;
+ for(const b of BF){const e=Math.min(1,Math.max(0,(now-t0-TEX-600-b.d*1000)/2200)),k=1-Math.pow(1-e,3),a=b.ph+b.w*t+(1-k)*3,r=b.r*k,dr2=b.w>0?1:-1;b.o.visible=e>0;
   b.o.position.set(Math.cos(a)*r,b.y*k+Math.sin(t*1.3+b.fp)*.6*k,Math.sin(a)*r);b.o.rotation.y=Math.atan2(-dr2*Math.sin(a),dr2*Math.cos(a));b.o.scale.setScalar(b.s*k*1.4);flap(b.o,t,b.fp,11+b.fp)}
  if(ph==='gal'){const act=now-lm<2500;
   for(const f of FL){f.pv.visible=true;let tx,ty;
@@ -199,6 +208,41 @@ function garden(now,dt,t){
    else{tx=Math.cos(t*.5+f.fp)*5.5;ty=Math.sin(t*.7+f.fp)*3.2+1}
    const p=f.pv.position,ox=p.x,oy=p.y,q=Math.min(1,dt*(act?2.5:1));p.x+=(tx-p.x)*q;p.y+=(ty-p.y)*q;
    if(Math.hypot(p.x-ox,p.y-oy)>.001)f.o.rotation.y=Math.atan2(p.x-ox,-(p.y-oy));f.o.scale.setScalar(.6);flap(f.o,t,f.fp,14)}}}
+// ===== รูหนอน -> ดอกไม้ดูดผีเสื้อ -> ระเบิดเป็นกาแล็กซี =====
+const TEX=rm?0:5500,WT=rm?600:TEX+2600,TL=70,TN=4200;let ex=false;const HT0=$('hint').textContent;
+const clp=(x,a,b)=>Math.min(1,Math.max(0,(x-a)/(b-a))),eo=x=>1-Math.pow(1-x,3);
+const tp=new Float32Array(TN*3),tk=new Float32Array(TN*3);
+for(let i=0;i<TN;i++){const th=Math.random()*6.283,z=-Math.random()*TL,r=2.6+Math.random()*.9+Math.sin(z*.25)*.5;tp.set([Math.cos(th)*r,Math.sin(th)*r,z],i*3);cc.setHSL((th/6.283+Math.random()*.08)%1,.85,.62);tk.set([cc.r,cc.g,cc.b],i*3)}
+const tun=pts(tp,tk,.2,1);tun.visible=false;tun.frustumCulled=false;sc.add(tun);
+function flowerGeo(){const P=6,n=P*30+30,p=new Float32Array(n*3),k=new Float32Array(n*3);let c=0;
+ for(let a=0;a<P;a++)for(let j=0;j<30;j++){const u=Math.random(),v=Math.random()*2-1,w=.4*Math.sin(Math.PI*Math.pow(u,.6)),ph=a*6.283/P,rho=u*1.1,l=.55+.45*u;p.set([rho*Math.cos(ph)-v*w*Math.sin(ph),rho*Math.sin(ph)+v*w*Math.cos(ph),.2*u*u],c*3);k.set([l,l,l],c*3);c++}
+ for(let j=0;j<30;j++){const a=Math.random()*6.283,r=Math.random()*.18;p.set([Math.cos(a)*r,Math.sin(a)*r,.05],c*3);k.set([1,.9,.5],c*3);c++}
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));g.setAttribute('color',new THREE.BufferAttribute(k,3));return g}
+const FG=flowerGeo(),FC=['#ff5a8a','#ffd95a','#7fe3ff','#c58bff','#ff9a5a','#8affc1'],TF=[],zv=new THREE.Vector3(0,0,1),nq=new THREE.Vector3();
+const fmat=(col,sz)=>new THREE.PointsMaterial({map:tx,size:sz,vertexColors:true,color:col,transparent:true,opacity:1,blending:THREE.AdditiveBlending,depthWrite:false});
+for(let i=0;i<12;i++){const f=new THREE.Points(FG,fmat(FC[i%6],.16)),th=i*2.4;f.frustumCulled=false;f.position.set(Math.cos(th)*2.9,Math.sin(th)*2.9,-i*TL/12);f.quaternion.setFromUnitVectors(zv,nq.set(-Math.cos(th),-Math.sin(th),0));f.scale.setScalar(.9);tun.add(f);TF.push(f)}
+const bigF=new THREE.Points(FG,fmat('#ff7fb0',.2));bigF.visible=false;bigF.frustumCulled=false;sc.add(bigF);
+const WB=[];for(let i=0;i<14;i++){const o=bfly(BC[i%5]),pv=new THREE.Group(),root=new THREE.Group();pv.rotation.x=Math.PI/2;pv.add(o);root.add(pv);root.visible=false;sc.add(root);WB.push({root,o,a0:i*.9,fp:Math.random()*6,px:0,py:0})}
+const BN=900,bp=new Float32Array(BN*3),bk=new Float32Array(BN*3),bvl=new Float32Array(BN*3);
+for(let i=0;i<BN;i++){cc.setHSL(Math.random(),.9,.65);bk.set([cc.r,cc.g,cc.b],i*3)}
+const bur=pts(bp,bk,.3,1);bur.visible=false;bur.frustumCulled=false;sc.add(bur);
+function warp(el,dt,t){
+ if(rm){stars.visible=true;return}
+ tun.position.z=cam.position.z;
+ const vis=1-clp(el,2800,4300),sp=(14+30*clp(el,0,3000))*dt;
+ tun.visible=el<TEX&&vis>0;
+ if(tun.visible){tun.rotation.z+=dt*.5;tun.material.opacity=vis;for(let i=0;i<TN;i++){const k=i*3+2;tp[k]+=sp;if(tp[k]>2)tp[k]-=TL}tun.geometry.attributes.position.needsUpdate=true;for(const f of TF){f.position.z+=sp;if(f.position.z>2)f.position.z-=TL;f.material.opacity=vis}}
+ cam.fov=60+(el<TEX?28*Math.sin(Math.PI*clp(el,0,TEX)):0);cam.updateProjectionMatrix();
+ const e2=eo(clp(el,2600,3800)),col=clp(el,5000,TEX);
+ bigF.visible=el>2600&&el<TEX;
+ if(bigF.visible){bigF.position.set(0,9*(1-e2),0);bigF.scale.setScalar(Math.max(.01,(.3+3.7*e2)*(1-.85*col)*(1+.05*Math.sin(t*9)*clp(el,3300,5000))));bigF.rotation.z+=dt*(1+3*clp(el,3300,5300))}
+ WB.forEach((b,i)=>{const p=clp(el,3300+i*60,5300),ap=clp(el,3000+i*60,3500),on=bigF.visible&&ap>0&&p<1;b.root.visible=on;if(!on)return;
+  const r=Math.pow(1-p,1.6)*(7+i%4),a=b.a0+p*10+(1-p),x=Math.cos(a)*r,y=bigF.position.y+Math.sin(a)*r*.7;
+  b.root.position.set(x,y,0);b.root.scale.setScalar(.8*ap*(1-p*.8));
+  const vx=x-b.px,vy=y-b.py;if(vx*vx+vy*vy>1e-6)b.root.rotation.z=Math.atan2(vx,-vy);b.px=x;b.py=y;flap(b.o,t,b.fp,14)});
+ if(el>=TEX&&!ex){ex=true;$('flash').classList.add('on');stars.visible=true;for(let i=0;i<BN;i++){const a=Math.random()*6.283,b2=Math.acos(2*Math.random()-1),s2=8+Math.random()*18;bp.set([0,0,0],i*3);bvl.set([Math.sin(b2)*Math.cos(a)*s2,Math.cos(b2)*s2,Math.sin(b2)*Math.sin(a)*s2],i*3)}}
+ if(ex){const q=el-TEX;bur.visible=q<2000;if(bur.visible){for(let i=0;i<BN*3;i++){bp[i]+=bvl[i]*dt;bvl[i]*=.985}bur.geometry.attributes.position.needsUpdate=true;bur.material.opacity=1-clp(q,0,2000)}stars.scale.setScalar(Math.min(1,.05+q/1800))}}
+function endWarp(){stars.visible=true;stars.scale.setScalar(1);G.scale.setScalar(1.001);cam.fov=60;cam.updateProjectionMatrix();tun.visible=bigF.visible=bur.visible=false;WB.forEach(b=>{b.root.visible=false});$('hint').textContent=HT0;$('hint').style.opacity=1}
 // state + input
 let ph='intro',t0=0,hs=0,hpr=0,yaw=0,pit=.85,vy=0,dr=false,lx=0,ly=0;
 const hb=$('hb');
@@ -207,18 +251,19 @@ hb.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefa
 addEventListener('pointerup',()=>{hs=0;dr=false});addEventListener('pointercancel',()=>{hs=0;dr=false});
 addEventListener('pointerdown',e=>{if(ph!=='gal'||e.target.closest('.stk,#ov,#zb,#lo2'))return;dr=true;lx=e.clientX;ly=e.clientY});
 addEventListener('pointermove',e=>{if(!dr)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;yaw+=dx*.006;pit=Math.max(-1.4,Math.min(1.4,pit+dy*.006));vy=dx*.36});
-function start(){if(ph!=='intro')return;ph='warp';t0=performance.now();hs=0;hpr=0;cam.position.x=cam.position.y=0;$('intro').classList.add('off');$('flash').classList.add('on');G.visible=true}
+function start(){if(ph!=='intro')return;ph='warp';t0=performance.now();hs=0;hpr=0;ex=false;cam.position.x=cam.position.y=0;$('intro').classList.add('off');G.visible=true;stars.visible=rm;if(!rm){tun.visible=true;$('hint').textContent='แตะเพื่อข้ามอนิเมชัน';$('hint').style.opacity=.7}}
+addEventListener('pointerdown',()=>{if(ph==='warp'){const n=performance.now();t0=n-(n-t0<TEX?TEX:WT)}});
 let last=0;
 function frame(now){const dt=Math.min(.05,(now-last)/1000||0),t=now/1000;last=now;zc+=(zt-zc)*Math.min(1,dt*8);cam.position.z=bz*zc;
  if(ph==='intro'){hpr=hs?Math.min(1,(now-hs)/1800):Math.max(0,hpr-dt*1.5);$('fill').setAttribute('y',90-hpr*90);stars.rotation.y+=dt*(.03+hpr*1.2);cam.position.x=(Math.random()-.5)*hpr*.3;cam.position.y=(Math.random()-.5)*hpr*.3;if(hpr>=1)start()}
- else{const u=Math.min(1,(now-t0)/(rm?600:3200));
-  if(ph==='warp'){const s=Math.sin(Math.PI*u),g=Math.max(0,(u-.25)/.75);stars.scale.setScalar(1+14*s);cam.fov=60+35*s;cam.updateProjectionMatrix();stars.rotation.y+=dt*3*s;G.scale.setScalar(.001+(1-Math.pow(1-g,3)));yaw+=dt*8*(1-g);
-   if(u>=1){ph='gal';document.body.classList.add('gal');$('hint').style.opacity=1;stars.scale.setScalar(1);cam.fov=60;cam.updateProjectionMatrix()}}
+ else{const el=now-t0;
+  if(ph==='warp'){warp(el,dt,t);const g=clp(el,TEX,TEX+(rm?600:2400));G.scale.setScalar(.001+eo(g));if(el>TEX)yaw+=dt*8*(1-g);
+   if(el>=WT){ph='gal';document.body.classList.add('gal');endWarp()}}
   else{stars.rotation.y+=dt*.01;if(!dr){yaw+=(vy+(rm?0:.1))*dt;vy*=.95}}
   G.rotation.set(pit,yaw,0);if(!rm){disc.rotation.y+=dt*.03;acc.rotation.y+=dt*.6}
   hrt.scale.setScalar(.38*(1+(rm?0:Math.pow(Math.max(0,Math.sin(t*3)),10)*.12)));hrt.rotation.y=t*.5;hrt.position.y=3.8+Math.sin(t*1.5)*.15;
   G.updateMatrixWorld(true);halo.quaternion.copy(G.quaternion).invert().multiply(cam.quaternion);garden(now,dt,t);
-  for(const it of I){const x=Math.min(1,Math.max(0,(now-t0-(rm?0:1500)-it.d*1000)/1400));place(it,1-Math.pow(1-x,3))}}
+  for(const it of I){const x=Math.min(1,Math.max(0,(now-t0-(rm?0:TEX+900)-it.d*1000)/1400));place(it,1-Math.pow(1-x,3))}}
  R.render(sc,cam);requestAnimationFrame(frame)}
 requestAnimationFrame(frame);
 // zoom: wheel, pinch, buttons
@@ -246,12 +291,20 @@ letter(b){b.innerHTML='<h3>จดหมายถึงโอปอ</h3><p id="ty
   $('ls').onclick=async()=>{$('lm').textContent='กำลังบันทึก...';const r=await sb.from('site_content').upsert({key:'letter',value:$('lt').value});if(r.error)$('lm').textContent='บันทึกไม่สำเร็จ: '+r.error.message;else{LT=$('lt').value;$('lm').textContent='บันทึกแล้ว ❤'}}}},
 time(b){b.innerHTML='<h3>เราอยู่ด้วยกันมา</h3><div class="clk"><div><b class="big" id="d">0</b><span>วัน</span></div><div><b class="big" id="h">0</b><span>ชั่วโมง</span></div><div><b class="big" id="m">0</b><span>นาที</span></div><div><b class="big" id="s">0</b><span>วินาที</span></div></div><p style="margin-top:16px;color:var(--mute)">ตั้งแต่ 15 กันยายน 2569</p>';
  const u=()=>{const t=Math.max(0,Date.now()-S);$('d').textContent=Math.floor(t/864e5);$('h').textContent=Math.floor(t/36e5)%24;$('m').textContent=Math.floor(t/6e4)%60;$('s').textContent=Math.floor(t/1e3)%60};u();const iv=setInterval(u,1000);cl=()=>clearInterval(iv)},
-music(b){if(!TR.length){b.innerHTML='<h3>เพลงของเรา</h3><div class="eq" id="eq"><i></i><i style="animation-delay:-.2s"></i><i style="animation-delay:-.5s"></i><i style="animation-delay:-.3s"></i><i style="animation-delay:-.7s"></i></div><p style="color:var(--mute)">ทำนองตัวอย่าง รอใส่เพลงของเราทีหลัง</p><button class="btn" id="pl"></button>';
- const r=()=>{$('pl').textContent=mus?'⏸ หยุดเพลง':'▶ เล่นเพลง';$('eq').className=mus?'eq':'eq off'};r();$('pl').onclick=()=>{toggle();r()};return}
- b.innerHTML='<div class="sp"><div class="cv" id="cv"></div><div class="tt" id="tt"></div><div class="ar" id="ar"></div><input class="rg" id="sk" type="range" min="0" max="1000" value="0" aria-label="ตำแหน่งเพลง"><div class="tm"><span id="t1">0:00</span><span id="t2">0:00</span></div><div class="ct"><button id="pv" type="button" aria-label="ก่อนหน้า">⏮</button><button id="pp" class="pl2" type="button" aria-label="เล่นหรือหยุด">▶</button><button id="nx" type="button" aria-label="ถัดไป">⏭</button></div><div class="ls" id="ls2"></div></div>';
- TR.forEach((t,i)=>{const r=document.createElement('div');r.className='tr';r.innerHTML='<span class="n">'+(i+1)+'</span><div><b></b><small></small></div>';r.querySelector('b').textContent=t.title;r.querySelector('small').textContent=t.artist;r.onclick=()=>playTr(i);$('ls2').appendChild(r)});
- $('pp').onclick=()=>{if(cur<0)playTr(0);else if(AU.paused)AU.play().catch(()=>{});else AU.pause()};$('pv').onclick=()=>playTr(cur<0?0:cur-1);$('nx').onclick=()=>playTr(cur<0?0:cur+1);
- $('sk').oninput=()=>{if(isFinite(AU.duration))AU.currentTime=$('sk').value/1000*AU.duration};spUI();spTime()},
+music(b){const TB=PL.concat(SPOTIFY.map(x=>({name:'Spotify · '+x.name,sp:x.url})));
+ if(!TB.length){b.innerHTML='<h3>เพลงของเรา</h3><div class="eq" id="eq"><i></i><i style="animation-delay:-.2s"></i><i style="animation-delay:-.5s"></i><i style="animation-delay:-.3s"></i><i style="animation-delay:-.7s"></i></div><p style="color:var(--mute)">ทำนองตัวอย่าง รอใส่เพลงของเราทีหลัง</p><button class="btn" id="pl"></button>';
+  const r=()=>{$('pl').textContent=mus?'⏸ หยุดเพลง':'▶ เล่นเพลง';$('eq').className=mus?'eq':'eq off'};r();$('pl').onclick=()=>{toggle();r()};return}
+ if(vi>=TB.length)vi=0;const cu=TB[vi],tabs=TB.length>1?'<div class="pt" id="pt"></div>':'';
+ if(cu.sp){b.innerHTML='<div class="sp">'+tabs+'<iframe id="spf" title="Spotify" style="border:0;border-radius:12px;width:100%;height:352px" allow="autoplay; clipboard-write; encrypted-media; fullscreen" loading="lazy"></iframe><p style="color:var(--mute);font-size:12px;margin-top:8px">ฟังเต็มเพลงได้เมื่อล็อกอิน Spotify ในเบราว์เซอร์นี้ ถ้าไม่ล็อกอินจะได้ฟังแค่ตัวอย่าง</p></div>';
+  const m=/^https:\/\/open\.spotify\.com\/(?:intl-[a-z]+\/)?(playlist|album|track|artist|episode|show)\/([A-Za-z0-9]+)/.exec(cu.sp);if(m)$('spf').src='https://open.spotify.com/embed/'+m[1]+'/'+m[2]+'?utm_source=generator'}
+ else{b.innerHTML='<div class="sp">'+tabs+'<div class="cv" id="cv"></div><div class="tt" id="tt"></div><div class="ar" id="ar"></div><input class="rg" id="sk" type="range" min="0" max="1000" value="0" aria-label="ตำแหน่งเพลง"><div class="tm"><span id="t1">0:00</span><span id="t2">0:00</span></div><div class="ct"><button id="sh" type="button" aria-label="สุ่มเพลง">🔀</button><button id="pv" type="button" aria-label="ก่อนหน้า">⏮</button><button id="pp" class="pl2" type="button" aria-label="เล่นหรือหยุด">▶</button><button id="nx" type="button" aria-label="ถัดไป">⏭</button><button id="rp" type="button" aria-label="วนซ้ำ">🔁</button></div><div class="vl">🔈<input class="rg" id="vo" type="range" min="0" max="100" aria-label="ระดับเสียง"></div><div class="ls" id="ls2"></div></div>';
+  cu.tracks.forEach((t,i)=>{const r=document.createElement('div');r.className='tr';r.innerHTML='<span class="n">'+(i+1)+'</span><div><b></b><small></small></div>';r.querySelector('b').textContent=t.title;r.querySelector('small').textContent=t.artist;r.onclick=()=>{Q=cu.tracks.slice();qi=i;playQ()};$('ls2').appendChild(r)});
+  $('pp').onclick=()=>{if(qi<0){Q=cu.tracks.slice();qi=SH?Math.random()*Q.length|0:0;playQ()}else if(AU.paused)AU.play().catch(()=>{});else AU.pause()};
+  $('pv').onclick=()=>{if(qi<0)$('pp').onclick();else prevTr()};$('nx').onclick=()=>{if(qi<0)$('pp').onclick();else nextTr(false)};
+  $('sh').onclick=()=>{SH=!SH;spUI()};$('rp').onclick=()=>{RP=(RP+1)%3;spUI()};
+  $('vo').value=AU.volume*100;$('vo').oninput=()=>{AU.volume=$('vo').value/100};
+  $('sk').oninput=()=>{if(isFinite(AU.duration))AU.currentTime=$('sk').value/1000*AU.duration};spUI();spTime()}
+ if(TB.length>1)TB.forEach((p,i)=>{const t=document.createElement('button');t.type='button';t.textContent=p.name;if(i===vi)t.className='on';t.onclick=()=>{vi=i;V.music(b)};$('pt').appendChild(t)})},
 game(b){b.innerHTML='<h3>จับดาว</h3><p>แตะดาวที่ร่วงลงมาให้ได้มากที่สุดใน 20 วินาที หัวใจได้ 3 คะแนน</p><div id="gm"></div><p id="sc" style="margin-top:8px">คะแนน 0</p><button class="btn" id="st">เริ่มเลย</button>';
  let n=0,tl=0,a,k;const stop=()=>{clearInterval(a);clearInterval(k)};cl=stop,txt=()=>$('sc').textContent='คะแนน '+n+' · เหลือ '+tl+' วิ';
  $('st').onclick=()=>{stop();n=0;tl=20;$('gm').innerHTML='';txt();$('st').style.display='none';
@@ -276,21 +329,28 @@ function shrink(f){return new Promise((ok,no)=>{const im=new Image(),u=URL.creat
 async function pushMem(r,live){let img='';if(r.image_path){const g=await sb.storage.from('photos').createSignedUrl(r.image_path,21600);img=g.data?g.data.signedUrl:''}
  const m={img,title:r.title||'ความทรงจำ',text:r.body||''};MEM.push(m);
  const d=live?(performance.now()-t0-1500)/1000:(CFG.length+MEM.length)*.2;
- add(mkHeart(m.title.slice(0,14),()=>open('mem',m)),spot(Math.random()*8,8+MEM.length),d,0)}
+ add(mkHeart(m.title.slice(0,14),()=>open('mem',m)),spot(CFG.length+MEM.length-1),d,0)}
 async function loadMem(){const r=await sb.from('memories').select('id,title,body,image_path').order('created_at');if(r.error||!r.data)return;await Promise.all(r.data.map(x=>pushMem(x)))}
-const AU=new Audio();AU.loop=false;let songUrl='',TR=[],cur=-1;
+const AU=new Audio();AU.loop=false;let songUrl='',PL=[],vi=0,Q=[],qi=-1,SH=false,RP=1;
 const fm=x=>isFinite(x)?Math.floor(x/60)+':'+String(Math.floor(x%60)).padStart(2,'0'):'0:00';
-function spUI(){const p=$('pp');if(!p)return;const t=TR[cur<0?0:cur];p.textContent=AU.paused?'▶':'⏸';
+function spUI(){const p=$('pp');if(!p)return;const cu=PL.concat(SPOTIFY.map(x=>({sp:x.url})))[vi],t=Q[qi]||(cu&&cu.tracks&&cu.tracks[0]);p.textContent=AU.paused?'▶':'⏸';
  if(t){$('tt').textContent=t.title;$('ar').textContent=t.artist;$('cv').style.backgroundImage=t.cover?'url('+t.cover+')':'';$('cv').classList.toggle('im',!!t.cover)}
- document.querySelectorAll('#ls2 .tr').forEach((e,i)=>e.classList.toggle('on',i===cur))}
+ $('sh').classList.toggle('on',SH);$('rp').textContent=RP===2?'🔂':'🔁';$('rp').classList.toggle('on',RP>0);
+ document.querySelectorAll('#ls2 .tr').forEach((e,i)=>e.classList.toggle('on',!!cu&&!!cu.tracks&&Q[qi]===cu.tracks[i]))}
 function spTime(){if(!$('sk'))return;const d=AU.duration;$('t1').textContent=fm(AU.currentTime);$('t2').textContent=fm(d);if(isFinite(d)&&d>0)$('sk').value=AU.currentTime/d*1000}
-function playTr(i){if(!TR.length)return;cur=(i+TR.length)%TR.length;AU.src=TR[cur].url;AU.play().catch(()=>{});spUI()}
-AU.onplay=AU.onpause=spUI;AU.ontimeupdate=AU.onloadedmetadata=spTime;
-AU.onended=()=>{if(TR.length>1)playTr(cur+1);else{AU.currentTime=0;AU.play().catch(()=>{})}};
-async function loadSong(){const l=await sb.storage.from('photos').list('music');if(l.error||!l.data)return;
- const au=l.data.filter(x=>/\.(mp3|m4a|aac|ogg|wav)$/i.test(x.name)).sort((a,b)=>a.name.localeCompare(b.name)),im=l.data.filter(x=>/\.(jpe?g|png|webp)$/i.test(x.name)),sg=async n=>{const g=await sb.storage.from('photos').createSignedUrl('music/'+n,21600);return g.data?g.data.signedUrl:''};
- TR=await Promise.all(au.map(async f=>{const b=f.name.replace(/\.[^.]+$/,''),c=im.find(x=>x.name.replace(/\.[^.]+$/,'')===b)||im.find(x=>/^cover\./i.test(x.name)),p=b.split(' - ');
-  return{title:(p[1]||p[0]).trim(),artist:p[1]?p[0].trim():'โบ๊ท & โอปอ',url:await sg(f.name),cover:c?await sg(c.name):''}}));TR=TR.filter(t=>t.url)}
+function playQ(){if(!Q[qi])return;AU.src=Q[qi].url;AU.play().catch(()=>{});spUI()}
+function nextTr(auto){if(!Q.length)return;if(RP===2&&auto){AU.currentTime=0;AU.play().catch(()=>{});return}
+ if(SH&&Q.length>1){let k;do{k=Math.random()*Q.length|0}while(k===qi);qi=k}else{qi++;if(qi>=Q.length){if(RP===0&&auto){qi=Q.length-1;AU.pause();spUI();return}qi=0}}playQ()}
+function prevTr(){if(!Q.length)return;if(AU.currentTime>3){AU.currentTime=0;return}qi=(qi-1+Q.length)%Q.length;playQ()}
+AU.onplay=AU.onpause=spUI;AU.ontimeupdate=AU.onloadedmetadata=spTime;AU.onended=()=>nextTr(true);
+async function loadSong(){const sg=async n=>{const g=await sb.storage.from('photos').createSignedUrl(n,21600);return g.data?g.data.signedUrl:''},
+ ld=async(dir,name)=>{const l=await sb.storage.from('photos').list(dir);if(l.error||!l.data)return null;
+  const au=l.data.filter(x=>/\.(mp3|m4a|aac|ogg|wav)$/i.test(x.name)).sort((a,b)=>a.name.localeCompare(b.name)),im=l.data.filter(x=>/\.(jpe?g|png|webp)$/i.test(x.name));
+  const tracks=(await Promise.all(au.map(async f=>{const b=f.name.replace(/\.[^.]+$/,''),c=im.find(x=>x.name.replace(/\.[^.]+$/,'')===b)||im.find(x=>/^cover\./i.test(x.name)),p=b.split(' - ');
+   return{title:(p[1]||p[0]).trim(),artist:p[1]?p[0].trim():'โบ๊ท & โอปอ',url:await sg(dir+'/'+f.name),cover:c?await sg(dir+'/'+c.name):''}}))).filter(t=>t.url);
+  return tracks.length?{name,tracks}:null},
+ root=await sb.storage.from('photos').list('music');if(root.error||!root.data)return;
+ PL=(await Promise.all([ld('music','เพลงของเรา')].concat(root.data.filter(x=>!x.id).map(x=>ld('music/'+x.name,x.name))))).filter(Boolean)}
 function setGif(el,url){const e=el.dataset.e,sm='<small>'+el.dataset.l+'</small>';el.classList.add('g');el.innerHTML='<img alt="" draggable="false" src="'+url+'">'+sm;el.firstChild.onerror=()=>{el.classList.remove('g');el.innerHTML=e+sm}}
 async function loadStickers(){const l=await sb.storage.from('photos').list('stickers');if(l.error||!l.data)return;
  for(const f of l.data){const m=/^([a-z]+)\.gif$/.exec(f.name);if(!m)continue;const g=await sb.storage.from('photos').createSignedUrl('stickers/'+f.name,21600);if(!g.data)continue;
